@@ -90,6 +90,6 @@ var jsmlWalkerCallback = function(parentNode, callback) {
     };
 };
 
-module.exports = function(jsml, parentNode, callback) {
+jsmlParser = function(jsml, parentNode, callback) {
     jsmlWalker(jsmlWalkerCallback(parentNode, callback))(jsml);
 };

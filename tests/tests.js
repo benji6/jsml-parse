@@ -39,4 +39,4 @@ var jsmlParserCallback = function(el){
 console.log(el);
 };
 */
-jsmlParser(jsml/*, jsmlParserCallback*/);
+jsmlParser(jsml, document.body/*, jsmlParserCallback*/);
