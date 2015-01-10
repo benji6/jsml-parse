@@ -19,8 +19,19 @@ var setAttribute = function(el, name, val) {
   el.setAttribute(name, val);
   return el;
 };
+var setClassName = function(el, name) {
+  el.className = name;
+  return el;
+};
+
+
+//not currently used:
 var infanticide = function(node) {
   while (node.firstChild) {
     node.removeChild(node.firstChild);
   }
+};
+var setAttribute = function(el, name, val) {
+  el.setAttribute(name, val);
+  return el;
 };

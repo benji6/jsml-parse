@@ -1,4 +1,4 @@
-var arrayWalker = function arrayWalker(fn) {
+var jsmlWalker = function arrayWalker(fn) {
   return function recurse(arr) {
     var i;
     for (i = 0; i < arr.length; i++) {
@@ -9,16 +9,11 @@ var arrayWalker = function arrayWalker(fn) {
 };
 
 
-var forEachCallback = function forEachCallback(el){
-  createAndAppendTextNode(el.text, compose(
-    createElement,
-    appendChild,
-    wrap(document.body)
-  )(el.el));
+var jsmlWalkerCallback = function (el){
+  var domEl = createElement(el.el);
+  el.text && appendChild(createTextNode(el.text))(domEl);
+  el.className && setClassName(domEl, el.className);
+  appendChild(domEl)(document.body);
 };
 
-arrayWalker(forEachCallback)(jsonml);
-
-
-
-//jsonml.forEach(forEachCallback);
+jsmlWalker(jsmlWalkerCallback)(jsonml);
