@@ -4,7 +4,7 @@ var jsmlTr = [
     "count": "1024",
     "callback": function(el, parentNode, count) {
       el.id = count.toString();
-      jsmlParser(jsmlTd, el);
+      jsmlParse(jsmlTd, el);
     }
   }
 ];
@@ -41,9 +41,9 @@ var jsmlMain = [
   {
     "tag": "table",
     "callback": function(el) {
-      jsmlParser(jsmlTr, el);
+      jsmlParse(jsmlTr, el);
     }
   }
 ];
 
-jsmlParser(jsmlMain, document.body/*, jsmlParserCallback*/);
+jsmlParse(jsmlMain, document.body/*, jsmlParserCallback*/);

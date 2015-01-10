@@ -100,6 +100,6 @@ var jsmlWalkerCallback = function(parentNode) {
     };
 };
 
-jsmlParser = function(jsml, parentNode, callback) {
+jsmlParse = function(jsml, parentNode, callback) {
     jsmlWalker(jsmlWalkerCallback(parentNode)(callback))(jsml);
 };
