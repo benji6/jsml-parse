@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "uglifyjs js/spiceRack.js js/domManipulation.js js/jsml.js js/main.js -b -o main.js",
+    "build": "uglifyjs lib/spiceRack.js lib/domManipulation.js lib/main.js -b -o jsmlParser.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -w js --exec \"npm run build\""
   },

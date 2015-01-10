@@ -2,6 +2,9 @@ var jsml = [
 {
   "tag": "h2",
   "text": "Sudoku Solver",
+  "callback": function(el) {
+    console.log(el);
+  },
   "children": [
     {
       "tag": "h2",
@@ -29,3 +32,11 @@ var jsml = [
     "tag": "div",
   }
 ];
+
+
+/*
+var jsmlParserCallback = function(el){
+console.log(el);
+};
+*/
+jsmlParser(jsml/*, jsmlParserCallback*/);

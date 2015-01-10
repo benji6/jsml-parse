@@ -69,29 +69,6 @@ var setAttribute = function(el, name, val) {
     return el;
 };
 
-var jsml = [ {
-    tag: "h2",
-    text: "Sudoku Solver",
-    children: [ {
-        tag: "h2",
-        text: "Sudoku Solver",
-        className: "testClass"
-    }, {
-        tag: "h6",
-        text: "child2"
-    } ]
-}, {
-    tag: "button",
-    text: "New Puzzle"
-}, {
-    tag: "button",
-    text: "Solve"
-}, {
-    tag: "div"
-}, {
-    tag: "div"
-} ];
-
 var jsmlWalker = function arrayWalker(fn) {
     return function recurse(arr) {
         var i;
@@ -106,6 +83,8 @@ var jsmlWalkerCallback = function(callback) {
     return function(el) {
         var domEl = createElement(el.tag);
         callback && callback(domEl);
+        console.log(el.callback);
+        el.callback && el.callback(el);
         el.text && appendChild(createTextNode(el.text))(domEl);
         el.className && setClassName(domEl, el.className);
         appendChild(domEl)(document.body);
@@ -115,9 +94,3 @@ var jsmlWalkerCallback = function(callback) {
 var jsmlParser = function(jsml, callback) {
     jsmlWalker(jsmlWalkerCallback(callback))(jsml);
 };
-
-var jsmlParserCallback = function(el) {
-    console.log(el);
-};
-
-jsmlParser(jsml, jsmlParserCallback);
