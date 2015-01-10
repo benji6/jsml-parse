@@ -1,25 +1,31 @@
-var jsonml = [
+var jsml = [
 {
-  "el": "p",
-  "text": "hello, how r you doing?",
+  "tag": "h2",
+  "text": "Sudoku Solver",
   "children": [
     {
-      "el": "h6",
-      "text": "child1",
+      "tag": "h2",
+      "text": "Sudoku Solver",
       "className": "testClass"
     },
     {
-      "el": "h6",
+      "tag": "h6",
       "text": "child2"
     }
   ]
   },
   {
-    "el": "h1",
-    "text": "hefsgfing?"
+    "tag": "button",
+    "text": "New Puzzle"
   },
   {
-    "el": "h2",
-    "text": "hello, how are you doing?"
+    "tag": "button",
+    "text": "Solve"
+  },
+  {
+    "tag": "div",
+  },
+  {
+    "tag": "div",
   }
 ];

@@ -69,23 +69,27 @@ var setAttribute = function(el, name, val) {
     return el;
 };
 
-var jsonml = [ {
-    el: "p",
-    text: "hello, how r you doing?",
+var jsml = [ {
+    tag: "h2",
+    text: "Sudoku Solver",
     children: [ {
-        el: "h6",
-        text: "child1",
+        tag: "h2",
+        text: "Sudoku Solver",
         className: "testClass"
     }, {
-        el: "h6",
+        tag: "h6",
         text: "child2"
     } ]
 }, {
-    el: "h1",
-    text: "hefsgfing?"
+    tag: "button",
+    text: "New Puzzle"
 }, {
-    el: "h2",
-    text: "hello, how are you doing?"
+    tag: "button",
+    text: "Solve"
+}, {
+    tag: "div"
+}, {
+    tag: "div"
 } ];
 
 var jsmlWalker = function arrayWalker(fn) {
@@ -98,11 +102,22 @@ var jsmlWalker = function arrayWalker(fn) {
     };
 };
 
-var jsmlWalkerCallback = function(el) {
-    var domEl = createElement(el.el);
-    el.text && appendChild(createTextNode(el.text))(domEl);
-    el.className && setClassName(domEl, el.className);
-    appendChild(domEl)(document.body);
+var jsmlWalkerCallback = function(callback) {
+    return function(el) {
+        var domEl = createElement(el.tag);
+        callback && callback(domEl);
+        el.text && appendChild(createTextNode(el.text))(domEl);
+        el.className && setClassName(domEl, el.className);
+        appendChild(domEl)(document.body);
+    };
 };
 
-jsmlWalker(jsmlWalkerCallback)(jsonml);
+var jsmlParser = function(jsml, callback) {
+    jsmlWalker(jsmlWalkerCallback(callback))(jsml);
+};
+
+var jsmlParserCallback = function(el) {
+    console.log(el);
+};
+
+jsmlParser(jsml, jsmlParserCallback);
