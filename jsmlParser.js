@@ -79,18 +79,17 @@ var jsmlWalker = function arrayWalker(fn) {
     };
 };
 
-var jsmlWalkerCallback = function(callback) {
+var jsmlWalkerCallback = function(parentNode, callback) {
     return function(el) {
         var domEl = createElement(el.tag);
         callback && callback(domEl);
-        console.log(el.callback);
-        el.callback && el.callback(el);
+        el.callback && el.callback(domEl);
         el.text && appendChild(createTextNode(el.text))(domEl);
         el.className && setClassName(domEl, el.className);
-        appendChild(domEl)(document.body);
+        appendChild(domEl)(parentNode);
     };
 };
 
-var jsmlParser = function(jsml, callback) {
-    jsmlWalker(jsmlWalkerCallback(callback))(jsml);
+module.exports = function(jsml, parentNode, callback) {
+    jsmlWalker(jsmlWalkerCallback(parentNode, callback))(jsml);
 };
