@@ -2,7 +2,7 @@
 ######JavaScript Markup Langauge
 ***Currently in development and not stable!!! This readme is mostly to help me understand what I am doing and what I actually want to do!***
 ##Description
-jsmlParse currently takes JavaScript array of objects to manipulate the DOM.
+jsmlParse takes jsml objects or an array of jsml objects to manipulate the DOM.
 
 ##jsml Structure
 properties of a jsml object (all are optional):
