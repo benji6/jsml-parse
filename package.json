@@ -1,0 +1,13 @@
+{
+  "name": "jsonml",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "uglifyjs js/spiceRack.js js/domManipulation.js js/main.js -o main.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -w js --exec \"npm run build\""
+  },
+  "author": "Ben Hall",
+  "license": "GPL-3.0"
+}
