@@ -11,7 +11,7 @@ properties of a jsml object (all are optional):
 - text - text to be appended to the element
 - class - set the class name here
 - count - number of elements to be created
-- callback - function to call on each element. Currently takes three arguments as follows:
+- callback - function to call on created DOM element. Currently takes three arguments as follows:
 ```javascript
 var callback = function(element, parentNode, index) {
   element //DOM element
@@ -30,7 +30,6 @@ var jsml = [
   "count": "8",
   "callback": function(element, parentNode, index) {
     element.id = index.toString();
-    jsmlParser(jsmlTd, el);
   }
 }
 ];
