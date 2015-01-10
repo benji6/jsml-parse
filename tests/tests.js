@@ -1,23 +1,32 @@
-var jsml1 = [
+var jsmlTr = [
   {
-    "tag": "tr"
-  },
+    "tag": "tr",
+    "count": "1024",
+    "callback": function(el, parentNode, count) {
+      el.id = count.toString();
+      jsmlParser(jsmlTd, el);
+    }
+  }
+];
+var jsmlTd = [
   {
-    "tag": "tr"
-  },
-  {
-    "tag": "tr"
+    "tag": "td",
+    "count": "16",
+    "text": "hello",
+    "callback": function(el, parentNode, count) {
+      this.text = (parseInt(parentNode.id) * this.count + count).toString();
+    }
   }
 ];
 
-var jsml0 = [
+var jsmlMain = [
   {
   "tag": "h2",
-  "text": "Sudoku Solver"
+  "text": "Test"
   },
   {
     "tag": "button",
-    "text": "New Puzzle"
+    "text": "Does Nothing!"
   },
   {
     "tag": "button",
@@ -32,18 +41,9 @@ var jsml0 = [
   {
     "tag": "table",
     "callback": function(el) {
-      jsmlParser(jsml1, el);
+      jsmlParser(jsmlTr, el);
     }
   }
 ];
 
-//add a number property for creating multiple elements and execute each
-//callback for each with a a number indicating the iteration count
-
-
-/*
-var jsmlParserCallback = function(el){
-console.log(el);
-};
-*/
-jsmlParser(jsml0, document.body/*, jsmlParserCallback*/);
+jsmlParser(jsmlMain, document.body/*, jsmlParserCallback*/);
