@@ -69,13 +69,28 @@ var setAttribute = function(el, name, val) {
     return el;
 };
 
-var jsmlWalker = function arrayWalker(fn) {
+var jsmlArrayWalker = function arrayWalker(fn) {
     return function recurse(arr) {
         var i;
         for (i = 0; i < arr.length; i++) {
             fn(arr[i]);
             arr[i].children && recurse(arr[i].children);
         }
+    };
+};
+
+var jsmlObjectWalker = function arrayWalker(fn) {
+    var recurse = function recurse(arr) {
+        var i;
+        for (i = 0; i < arr.length; i++) {
+            fn(arr[i]);
+            arr[i].children && recurse(arr[i].children);
+        }
+    };
+    return function(obj) {
+        var i;
+        fn(obj);
+        obj.children && recurse(obj.children);
     };
 };
 
@@ -100,6 +115,10 @@ var jsmlWalkerCallback = function(parentNode) {
     };
 };
 
-jsmlParser = function(jsml, parentNode, callback) {
-    jsmlWalker(jsmlWalkerCallback(parentNode)(callback))(jsml);
+jsmlParse = function(jsml, parentNode, forEachCallback) {
+    if (jsml.constructor === Array) {
+        jsmlArrayWalker(jsmlWalkerCallback(parentNode)(forEachCallback))(jsml);
+    } else {
+        jsmlObjectWalker(jsmlWalkerCallback(parentNode)(forEachCallback))(jsml);
+    }
 };
