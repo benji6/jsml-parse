@@ -79,16 +79,17 @@ var setAttribute = function(el, name, val) {
 var jsmlWalker = function jsmlWalker(fn) {
     return function recurse(jsml) {
         return function(parentNode) {
+            var domEl;
             fnParentSet = fn(parentNode);
             if (jsml.constructor === Array) {
                 var i;
                 for (i = 0; i < jsml.length; i++) {
-                    fnParentSet(jsml[i]);
-                    jsml[i].children && recurse(jsml[i].children)(document.body);
+                    domEl = fnParentSet(jsml[i]);
+                    jsml[i].children && recurse(jsml[i].children)(domEl);
                 }
             } else {
-                fnParentSet(jsml);
-                jsml.children && recurse(jsml.children)(document.body);
+                domEl = fnParentSet(jsml);
+                jsml.children && recurse(jsml.children)(domEl);
             }
         };
     };
@@ -111,11 +112,11 @@ var jsmlWalkerCallback = function(forEachCallback) {
                     recurse(el, recurseCount);
                 }
             }
+            return domEl;
         };
     };
 };
 
 jsmlParse = function(jsml, parentNode, forEachCallback) {
-    var composed = compose(jsmlWalker, jsmlWalkerCallback, forEachCallback);
     jsmlWalker(jsmlWalkerCallback(forEachCallback))(jsml)(parentNode);
 };
