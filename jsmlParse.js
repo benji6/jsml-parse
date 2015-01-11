@@ -53,6 +53,11 @@ var setAttribute = function(el, name, val) {
     return el;
 };
 
+var setId = function(el, name) {
+    el.id = name;
+    return el;
+};
+
 var setClassName = function(el, name) {
     el.className = name;
     return el;
@@ -94,6 +99,7 @@ var jsmlWalkerCallback = function(parentNode) {
             forEachCallback && calforEachCallbacklback(domEl, parentNode, recurseCount);
             el.callback && el.callback(domEl, parentNode, recurseCount);
             el.text && appendChild(createTextNode(el.text))(domEl);
+            el.id && setId(domEl, el.id);
             el.className && setClassName(domEl, el.className);
             appendChild(domEl)(parentNode);
             if (el.count) {

@@ -62,6 +62,7 @@ var jsmlSingle = {
 };
 var jsmlSingle2 = {
   "tag": "p",
+  "id": "testId",
   "text": "this jsml object is not in an array. It also has one child which is not an array",
   "children": {
       "tag": "p",
