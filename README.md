@@ -32,7 +32,7 @@ var jsml = {
   "class": "red",
   "count": "8",
   "callback": function(element, parentNode, index) {
-    element.id = index.toString();
+    //can do anything here, e.g. set events, dynamic ids and classes etc...
   }
 };
 ```
