@@ -70,6 +70,21 @@ var jsmlSingle2 = {
     }
 };
 
+jsmlParse({
+  "tag": "div",
+  "text": "children and count Parents",
+  "count": 3,
+  "children": [
+    {
+      "tag": "div",
+      "text": "child",
+      "count": 3
+    }
+  ]
+}, document.body);
+
+
+
 jsmlParse(jsmlSingle, document.body/*, jsmlParserCallback*/);
 jsmlParse(jsmlSingle2, document.body/*, jsmlParserCallback*/);
 
