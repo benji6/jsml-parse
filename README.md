@@ -18,7 +18,8 @@ properties of a jsml object (all are optional):
 var callback = function(element, parentNode, index) {
   element //DOM element
   parentNode //parent DOM element
-  index //if count is specified in the jsml the index corresponds to the index of the element created so far, otherwise it will be 0
+  index //if count is specified in the jsml the index corresponds to the index
+        //of the element created so far, otherwise it will be 0
 }
 ```
 
@@ -27,6 +28,7 @@ here is an example of some jsml:
 var jsml = {
   "tag": "p",
   "text": "hello, my count is: ",
+  "id": "id"
   "class": "red",
   "count": "8",
   "callback": function(element, parentNode, index) {
