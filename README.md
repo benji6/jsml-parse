@@ -4,14 +4,14 @@
 jsmlParse takes jsml objects or an array of jsml objects to manipulate the DOM.
 
 ##jsml Structure
-properties of a jsml object (all are optional):
+properties of a jsml object. All are optional and where callbacks are allowed count will be passed is as the first argument:
 
-- tag - corresponds to html tag
-- text - text to be appended to the element, can be a function, in which case id is set to the return value.
-- id - element id, can be a function, in which case id is set to the return value.
-- class - element class name, can be a function, in which case id is set to the return value.
+- tag - corresponds to html tag.
+- text - text to be appended to the element, can be a function, in which case id is set to the return value and count is passed as the first variable.
+- id - element id, can be a function, in which case id is set to the return value and count is passed as the first variable.
+- class - element class name, can be a function, in which case id is set to the return value and count is passed as the first variable.
 - children - either a single jsml object or an array of jsml objects to be appended to the current DOM element.
-- count - number of elements to be created
+- count - number of elements to be created.
 - callback - function to call on created DOM element(s). Currently takes three arguments as follows:
 ```javascript
 var callback = function(element, parentNode, index) {
@@ -77,12 +77,11 @@ var jsmlSudokuView = {
               children: {
                 tag: "option",
                 count: "10",
-                callback: function(el, parentNode, count) {
+                text: function(count) {
                   if (!count) {
-                    this.text = '';
-                    return;
+                    return '';
                   }
-                  this.text = count;
+                  return count;
                 }
               }
             }
