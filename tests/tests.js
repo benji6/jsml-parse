@@ -60,7 +60,16 @@ var jsmlSingle = {
     }
   ]
 };
+var jsmlSingle2 = {
+  "tag": "p",
+  "text": "this jsml object is not in an array. It also has one child which is not an array",
+  "children": {
+      "tag": "p",
+      "text": "I'm a child not in an array"
+    }
+};
 
 jsmlParse(jsmlSingle, document.body/*, jsmlParserCallback*/);
+jsmlParse(jsmlSingle2, document.body/*, jsmlParserCallback*/);
 
 jsmlParse(jsmlMain, document.body/*, jsmlParserCallback*/);

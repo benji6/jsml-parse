@@ -10,6 +10,7 @@ properties of a jsml object (all are optional):
 - tag - corresponds to html tag
 - text - text to be appended to the element
 - class - set the class name here
+- children - either a single jsml object or an array of jsml objects to be appended to the current DOM element.
 - count - number of elements to be created
 - callback - function to call on created DOM element. Currently takes three arguments as follows:
 ```javascript
