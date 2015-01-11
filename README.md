@@ -73,9 +73,7 @@ var jsmlSudokuView = {
             count: "3",
             children: {
               tag: "select",
-              callback: function(el, parentNode, count) {
-                el.id = getId();
-              },
+              id: getId,
               children: {
                 tag: "option",
                 count: "10",
