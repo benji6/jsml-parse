@@ -24,8 +24,7 @@ var callback = function(element, parentNode, index) {
 
 here is an example of some jsml:
 ```javascript
-var jsml = [
-{
+var jsml = {
   "tag": "p",
   "text": "hello, my count is: ",
   "class": "red",
@@ -33,8 +32,7 @@ var jsml = [
   "callback": function(element, parentNode, index) {
     element.id = index.toString();
   }
-}
-];
+};
 ```
 ##jsmlParse
 jsmlParse takes three arguments as below:

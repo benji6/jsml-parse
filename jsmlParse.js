@@ -99,7 +99,6 @@ var jsmlWalkerCallback = function(parentNode) {
             forEachCallback && calforEachCallbacklback(domEl, parentNode, recurseCount);
             el.callback && el.callback(domEl, parentNode, recurseCount);
             el.text && appendChild(createTextNode(el.text))(domEl);
-            el.id && setId(domEl, el.id);
             el.className && setClassName(domEl, el.className);
             appendChild(domEl)(parentNode);
             if (el.count) {
