@@ -82,13 +82,12 @@ var jsmlWalker = function jsmlWalker(fn) {
             var domEl;
             var fnParentSet = fn(parentNode);
             var run = function(jsml) {
-                domEl = fnParentSet(jsml);
-                jsml.children && recurse(jsml.children)(domEl);
-                if (jsml.count) {
-                    for (var i = 0; i < jsml.count; i++) {
-                        domEl = fnParentSet(jsml, i);
-                        jsml.children && recurse(jsml.children)(domEl);
-                    }
+                if (!jsml.count) {
+                    jsml.count = 1;
+                }
+                for (var i = 0; i < jsml.count; i++) {
+                    domEl = fnParentSet(jsml, i);
+                    jsml.children && recurse(jsml.children)(domEl);
                 }
             };
             if (jsml.constructor === Array) {
