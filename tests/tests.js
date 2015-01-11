@@ -83,7 +83,52 @@ jsmlParse({
   ]
 }, document.body);
 
+var getId = (function() {
+  var id = 0;
+  return function() {
+    return id++;
+  };
+}());
 
+jsmlParse({
+  tag: "table",
+  children: {
+    tag: "tr",
+    count: "3",
+    children: {
+      tag: "td",
+      count: "3",
+      children: {
+        tag: "table",
+        children: {
+          tag: "tr",
+          count: "3",
+          children: {
+            tag: "td",
+            count: "3",
+            children: {
+              tag: "select",
+              callback: function(el, parentNode, count) {
+                el.id = getId();
+              },
+              children: {
+                tag: "option",
+                count: "10",
+                callback: function(el, parentNode, count) {
+                  if (!count) {
+                    this.text = '';
+                    return;
+                  }
+                  this.text = count;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}, document.body);
 
 jsmlParse(jsmlSingle, document.body/*, jsmlParserCallback*/);
 jsmlParse(jsmlSingle2, document.body/*, jsmlParserCallback*/);
