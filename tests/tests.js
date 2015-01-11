@@ -47,7 +47,7 @@ var jsmlMain = [
 ];
 
 var jsmlSingle = {
-  "tag": "p",
+  "tag": "div",
   "text": "this jsml object is not in an array. It also has children",
   "children": [
     {

@@ -14,7 +14,9 @@ var compose = function() {
     var fns = arguments;
     return function(x) {
         iterateFrom(0)(fns.length)(function(i) {
-            x = fns[i].call(this, x);
+            if (fns[i]) {
+                x = fns[i].call(this, x);
+            }
         });
         return x;
     };
@@ -74,23 +76,26 @@ var setAttribute = function(el, name, val) {
     return el;
 };
 
-var jsmlWalker = function arrayWalker(fn) {
+var jsmlWalker = function jsmlWalker(fn) {
     return function recurse(jsml) {
-        if (jsml.constructor === Array) {
-            var i;
-            for (i = 0; i < jsml.length; i++) {
-                fn(jsml[i]);
-                jsml[i].children && recurse(jsml[i].children);
+        return function(parentNode) {
+            fnParentSet = fn(parentNode);
+            if (jsml.constructor === Array) {
+                var i;
+                for (i = 0; i < jsml.length; i++) {
+                    fnParentSet(jsml[i]);
+                    jsml[i].children && recurse(jsml[i].children)(document.body);
+                }
+            } else {
+                fnParentSet(jsml);
+                jsml.children && recurse(jsml.children)(document.body);
             }
-        } else {
-            fn(jsml);
-            jsml.children && recurse(jsml.children);
-        }
+        };
     };
 };
 
-var jsmlWalkerCallback = function(parentNode) {
-    return function(forEachCallback) {
+var jsmlWalkerCallback = function(forEachCallback) {
+    return function(parentNode) {
         return function recurse(el, recurseCount) {
             if (!recurseCount) {
                 recurseCount = 0;
@@ -111,5 +116,6 @@ var jsmlWalkerCallback = function(parentNode) {
 };
 
 jsmlParse = function(jsml, parentNode, forEachCallback) {
-    jsmlWalker(jsmlWalkerCallback(parentNode)(forEachCallback))(jsml);
+    var composed = compose(jsmlWalker, jsmlWalkerCallback, forEachCallback);
+    jsmlWalker(jsmlWalkerCallback(forEachCallback))(jsml)(parentNode);
 };
