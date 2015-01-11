@@ -7,9 +7,9 @@ jsmlParse takes jsml objects or an array of jsml objects to manipulate the DOM.
 properties of a jsml object (all are optional):
 
 - tag - corresponds to html tag
-- text - text to be appended to the element
-- id - element id
-- class - element class name
+- text - text to be appended to the element, can be a function, in which case id is set to the return value.
+- id - element id, can be a function, in which case id is set to the return value.
+- class - element class name, can be a function, in which case id is set to the return value.
 - children - either a single jsml object or an array of jsml objects to be appended to the current DOM element.
 - count - number of elements to be created
 - callback - function to call on created DOM element(s). Currently takes three arguments as follows:

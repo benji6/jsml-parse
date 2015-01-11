@@ -66,12 +66,20 @@ var jsmlSingle2 = {
   "text": "this jsml object is not in an array. It also has one child which is not an array",
   "children": {
       "tag": "p",
-      "text": "I'm a child not in an array"
+      "text": function() {
+        return 'my text is set by a function';
+      }
     }
 };
 
 jsmlParse({
   "tag": "div",
+  id: function() {
+    return "idsetbyfunction";
+  },
+  class: function() {
+    return "classSetByFn";
+  },
   "text": "children and count Parents",
   "count": 3,
   "children": [
@@ -108,9 +116,7 @@ jsmlParse({
             count: "3",
             children: {
               tag: "select",
-              callback: function(el, parentNode, count) {
-                el.id = getId();
-              },
+              id: getId,
               children: {
                 tag: "option",
                 count: "10",
