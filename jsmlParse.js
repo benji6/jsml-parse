@@ -22,12 +22,6 @@ var compose = function() {
     };
 };
 
-var wrap = function(parent) {
-    return function(fn) {
-        return fn(parent);
-    };
-};
-
 var createElement = function(tag) {
     return document.createElement(tag);
 };
@@ -42,19 +36,6 @@ var appendChild = function(child) {
     };
 };
 
-var createAndAppendChild = function(tag, parent) {
-    return appendChild(createElement(tag))(parent);
-};
-
-var createAndAppendTextNode = function(txt, parent) {
-    return appendChild(createTextNode(txt))(parent);
-};
-
-var setAttribute = function(el, name, val) {
-    el.setAttribute(name, val);
-    return el;
-};
-
 var setId = function(el, name) {
     el.id = name;
     return el;
@@ -62,17 +43,6 @@ var setId = function(el, name) {
 
 var setClassName = function(el, name) {
     el.className = name;
-    return el;
-};
-
-var infanticide = function(node) {
-    while (node.firstChild) {
-        node.removeChild(node.firstChild);
-    }
-};
-
-var setAttribute = function(el, name, val) {
-    el.setAttribute(name, val);
     return el;
 };
 
