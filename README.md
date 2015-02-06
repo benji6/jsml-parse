@@ -36,12 +36,11 @@ var jsml = {
 };
 ```
 ##jsmlParse
-jsmlParse takes three arguments as below:
+jsmlParse takes two arguments as below:
 ```javascript
 var jsml //array of jsml compliant objects
 var parentNode //element to attach new DOM tree to
-var callback //optional function to apply to all elements created by jsmlParse. Takes same arguments as callback which can be specified for each jsml object (see above)
-jsmlParse(jsml, parentNode[, callback]);
+jsmlParse(jsml, parentNode);
 ```
 ##Example
 ###Rendering a sudoku grid using DOM elements

@@ -10,14 +10,21 @@ var iterateFrom = function(fr) {
     };
 };
 
-var compose = function() {
-    var fns = arguments;
-    return function(x) {
-        iterateFrom(0)(fns.length)(function(i) {
-            if (fns[i]) {
-                x = fns[i].call(this, x);
+var chain = function chain(fns) {
+    return function(x, i) {
+        i = i || 0;
+        var fn;
+        var binaryReturnFn = function(y) {
+            return chain(fns)(fn(x, y), ++i);
+        };
+        while (i < fns.length) {
+            fn = fns[i];
+            if (fn.length === 2) {
+                return binaryReturnFn;
             }
-        });
+            x = fn(x);
+            i++;
+        }
         return x;
     };
 };
@@ -44,6 +51,14 @@ var setId = function(el, name) {
 var setClassName = function(el, name) {
     el.className = name;
     return el;
+};
+
+var setAttribute = function(el, attr, value) {
+    if (el.attr === undefined) {
+        console.log("jsmlParse error: " + el + " does not have attribute " + attr);
+        return;
+    }
+    el.attr = value;
 };
 
 var jsmlWalker = function jsmlWalker(fn) {
@@ -92,24 +107,21 @@ var textSetter = function(text, domEl, count) {
     }
 };
 
-var jsmlWalkerCallback = function(forEachCallback) {
-    return function(parentNode) {
-        return function(el, count) {
-            if (!count) {
-                count = 0;
-            }
-            var domEl = createElement(el.tag);
-            forEachCallback && forEachCallback(domEl, parentNode, count);
-            el.callback && el.callback(domEl, parentNode, count);
-            textSetter(el.text, domEl, count);
-            attrSetter(el, "id", domEl, setId);
-            attrSetter(el, "class", domEl, setClassName);
-            appendChild(domEl)(parentNode);
-            return domEl;
-        };
+var jsmlWalkerCallback = function(parentNode) {
+    return function(el, count) {
+        if (!count) {
+            count = 0;
+        }
+        var domEl = createElement(el.tag);
+        el.callback && el.callback(domEl, parentNode, count);
+        textSetter(el.text, domEl, count);
+        attrSetter(el, "id", domEl, setId);
+        attrSetter(el, "class", domEl, setClassName);
+        appendChild(domEl)(parentNode);
+        return domEl;
     };
 };
 
-jsmlParse = function(jsml, parentNode, forEachCallback) {
-    jsmlWalker(jsmlWalkerCallback(forEachCallback))(jsml)(parentNode);
+jsmlParse = function(jsml, parentNode) {
+    jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
 };
