@@ -6,7 +6,7 @@
   "scripts": {
     "build": "watchify js/main.js -o jsmlParse.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "watchify lib/main.js -o jsmlParse.js"
+    "dev": "watchify js/main.js -o jsmlParse.js"
   },
   "author": "Ben Hall",
   "license": "GPL-3.0",

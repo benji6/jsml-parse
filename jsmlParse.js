@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/b/js/wip/jsml/lib/domManipulation.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/b/js/wip/jsml/js/domManipulation.js":[function(require,module,exports){
 module.exports = {
   appendChild: function (child) {
     return function (parent) {
@@ -22,7 +22,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/b/js/wip/jsml/lib/main.js":[function(require,module,exports){
+},{}],"/home/b/js/wip/jsml/js/main.js":[function(require,module,exports){
 var iterateFrom = require('./spiceRack.js');
 var dom = require('./domManipulation.js');
 
@@ -99,7 +99,7 @@ jsmlParse = function(jsml, parentNode) {
   jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
 };
 
-},{"./domManipulation.js":"/home/b/js/wip/jsml/lib/domManipulation.js","./spiceRack.js":"/home/b/js/wip/jsml/lib/spiceRack.js"}],"/home/b/js/wip/jsml/lib/spiceRack.js":[function(require,module,exports){
+},{"./domManipulation.js":"/home/b/js/wip/jsml/js/domManipulation.js","./spiceRack.js":"/home/b/js/wip/jsml/js/spiceRack.js"}],"/home/b/js/wip/jsml/js/spiceRack.js":[function(require,module,exports){
 module.exports = function (fr) {
   return function (count) {
     return function (fn) {
@@ -112,4 +112,4 @@ module.exports = function (fr) {
   };
 };
 
-},{}]},{},["/home/b/js/wip/jsml/lib/main.js"]);
+},{}]},{},["/home/b/js/wip/jsml/js/main.js"]);
