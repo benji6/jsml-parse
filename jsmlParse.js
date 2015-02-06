@@ -10,25 +10,6 @@ var iterateFrom = function(fr) {
     };
 };
 
-var chain = function chain(fns) {
-    return function(x, i) {
-        i = i || 0;
-        var fn;
-        var binaryReturnFn = function(y) {
-            return chain(fns)(fn(x, y), ++i);
-        };
-        while (i < fns.length) {
-            fn = fns[i];
-            if (fn.length === 2) {
-                return binaryReturnFn;
-            }
-            x = fn(x);
-            i++;
-        }
-        return x;
-    };
-};
-
 var createElement = function(tag) {
     return document.createElement(tag);
 };
@@ -107,18 +88,18 @@ var textSetter = function(text, domEl, count) {
     }
 };
 
-var jsmlWalkerCallback = function(parentNode) {
-    return function(el, count) {
+var jsmlWalkerCallback = function(parentDomElement) {
+    return function(jsmlElement, count) {
         if (!count) {
             count = 0;
         }
-        var domEl = createElement(el.tag);
-        el.callback && el.callback(domEl, parentNode, count);
-        textSetter(el.text, domEl, count);
-        attrSetter(el, "id", domEl, setId);
-        attrSetter(el, "class", domEl, setClassName);
-        appendChild(domEl)(parentNode);
-        return domEl;
+        var domElement = createElement(jsmlElement.tag);
+        jsmlElement.callback && jsmlElement.callback(domElement, parentDomElement, count);
+        textSetter(jsmlElement.text, domElement, count);
+        attrSetter(jsmlElement, "id", domElement, setId);
+        attrSetter(jsmlElement, "class", domElement, setClassName);
+        appendChild(domElement)(parentDomElement);
+        return domElement;
     };
 };
 
