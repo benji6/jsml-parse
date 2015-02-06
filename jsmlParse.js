@@ -1,108 +1,115 @@
-var iterateFrom = function(fr) {
-    return function(count) {
-        return function(fn) {
-            var from = fr;
-            var to = count + fr;
-            while (from < to) {
-                fn(from++);
-            }
-        };
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/b/js/wip/jsml/lib/domManipulation.js":[function(require,module,exports){
+module.exports = {
+  appendChild: function (child) {
+    return function (parent) {
+      return parent.appendChild(child);
     };
-};
-
-var createElement = function(tag) {
-    return document.createElement(tag);
-};
-
-var createTextNode = function(txt) {
-    return document.createTextNode(txt);
-};
-
-var appendChild = function(child) {
-    return function(parent) {
-        return parent.appendChild(child);
-    };
-};
-
-var setId = function(el, name) {
+  },
+  setId: function (el, name) {
     el.id = name;
     return el;
-};
-
-var setClassName = function(el, name) {
+  },
+  setClassName: function (el, name) {
     el.className = name;
     return el;
-};
-
-var setAttribute = function(el, attr, value) {
+  },
+  setAttribute: function (el, attr, value) {
     if (el.attr === undefined) {
-        console.log("jsmlParse error: " + el + " does not have attribute " + attr);
-        return;
+      console.log("jsmlParse error: " + el + " does not have attribute " + attr);
+      return;
     }
     el.attr = value;
+  }
 };
 
-var jsmlWalker = function jsmlWalker(fn) {
-    return function recurse(jsml) {
-        return function(parentNode) {
-            var domEl;
-            var fnParentSet = fn(parentNode);
-            var run = function(jsml) {
-                if (!jsml.count) {
-                    jsml.count = 1;
-                }
-                for (var i = 0; i < jsml.count; i++) {
-                    domEl = fnParentSet(jsml, i);
-                    jsml.children && recurse(jsml.children)(domEl);
-                }
-            };
-            if (jsml.constructor === Array) {
-                var i;
-                for (i = 0; i < jsml.length; i++) {
-                    run(jsml[i]);
-                }
-            } else {
-                run(jsml);
-            }
-        };
+},{}],"/home/b/js/wip/jsml/lib/main.js":[function(require,module,exports){
+var iterateFrom = require('./spiceRack.js');
+var dom = require('./domManipulation.js');
+
+var jsmlWalker = function jsmlWalker (fn) {
+  return function recurse (jsml) {
+    return function (parentNode) {
+      var domEl;
+      var fnParentSet = fn(parentNode);
+      var run = function (jsml) {
+        if (!jsml.count) {
+          jsml.count = 1;
+        }
+        for (var i = 0; i < jsml.count; i++) {
+          domEl = fnParentSet(jsml, i);
+          jsml.children && recurse(jsml.children)(domEl);
+        }
+      };
+      if (jsml.constructor === Array) {
+        var i;
+        for (i = 0; i < jsml.length; i++) {
+          run(jsml[i]);
+        }
+      } else {
+        run(jsml);
+      }
     };
+  };
 };
 
 var attrSetter = function(el, prop, domEl, fn, count) {
-    if (el[prop]) {
-        if (typeof el[prop] === "function") {
-            fn(domEl, el[prop](count));
-            return;
-        }
-        fn(domEl, el[prop]);
+  if(el[prop]) {
+    if (typeof el[prop] === 'function') {
+      fn(domEl, el[prop](count));
+      return;
     }
+    fn(domEl, el[prop]);
+  }
 };
 
-var textSetter = function(text, domEl, count) {
-    if (text) {
-        if (typeof text === "function") {
-            appendChild(createTextNode(text(count)))(domEl);
-            return;
-        }
-        appendChild(createTextNode(text))(domEl);
+var textSetter = function (text, domEl, count) {
+    if (typeof text === 'function') {
+      dom.appendChild(document.createTextNode(text(count)))(domEl);
+      return;
     }
+    dom.appendChild(document.createTextNode(text))(domEl);
 };
 
-var jsmlWalkerCallback = function(parentDomElement) {
-    return function(jsmlElement, count) {
-        if (!count) {
-            count = 0;
+var jsmlWalkerCallback = function (parentDomElement) {
+    return function (jsmlElement, count) {
+      if (!count) {
+        count = 0;
+      }
+      var domElement = document.createElement(jsmlElement.tag);
+      for (var property in jsmlElement) {
+        if (jsmlElement.hasOwnProperty(property)) {
+          switch (property) {
+            case "text":
+              textSetter(jsmlElement.text, domElement, count);
+              break;
+          }
         }
-        var domElement = createElement(jsmlElement.tag);
-        jsmlElement.callback && jsmlElement.callback(domElement, parentDomElement, count);
-        textSetter(jsmlElement.text, domElement, count);
-        attrSetter(jsmlElement, "id", domElement, setId);
-        attrSetter(jsmlElement, "class", domElement, setClassName);
-        appendChild(domElement)(parentDomElement);
-        return domElement;
-    };
+      }
+      attrSetter(jsmlElement, 'id', domElement, dom.setId);
+      attrSetter(jsmlElement, 'class', domElement, dom.setClassName);
+
+
+      jsmlElement.callback && jsmlElement.callback(domElement, parentDomElement, count);
+      dom.appendChild(domElement)(parentDomElement);
+      return domElement;
+  };
 };
 
 jsmlParse = function(jsml, parentNode) {
-    jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
+  jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
 };
+
+},{"./domManipulation.js":"/home/b/js/wip/jsml/lib/domManipulation.js","./spiceRack.js":"/home/b/js/wip/jsml/lib/spiceRack.js"}],"/home/b/js/wip/jsml/lib/spiceRack.js":[function(require,module,exports){
+module.exports = function (fr) {
+  return function (count) {
+    return function (fn) {
+      var from = fr;
+      var to = count + fr;
+      while (from < to) {
+        fn(from++);
+      }
+    };
+  };
+};
+
+},{}]},{},["/home/b/js/wip/jsml/lib/main.js"]);
