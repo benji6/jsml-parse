@@ -1,7 +1,27 @@
+var parsed = jsmlParse({
+  "tag": "input",
+  "type": "range"
+});
+
+parsed(document.body);
+
+var jsml = {
+  "tag": "p",
+  "text": (count) => "hello, my count is: " + count,
+  "id": "id",
+  "class": "red",
+  "count": "8",
+  "callback": function(element, parentNode, index) {
+    //can do anything here, e.g. set events, dynamic ids and classes etc...
+  }
+};
+
+jsmlParse(jsml, document.body);
+
 var jsmlTr = [
   {
     "tag": "tr",
-    "count": "1024",
+    "count": "16",
     "callback": function(el, parentNode, count) {
       el.id = count.toString();
       jsmlParse(jsmlTd, el);

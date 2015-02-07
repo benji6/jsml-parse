@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/b/js/wip/jsml/js/domManipulation.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/b/js/jsml/js/domManipulation.js":[function(require,module,exports){
 module.exports = {
   appendChild: function (child) {
     return function (parent) {
@@ -22,7 +22,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/b/js/wip/jsml/js/main.js":[function(require,module,exports){
+},{}],"/home/b/js/jsml/js/main.js":[function(require,module,exports){
 var iterateFrom = require('./spiceRack.js');
 var dom = require('./domManipulation.js');
 
@@ -52,16 +52,6 @@ var jsmlWalker = function jsmlWalker (fn) {
   };
 };
 
-var attrSetter = function(el, prop, domEl, fn, count) {
-  if(el[prop]) {
-    if (typeof el[prop] === 'function') {
-      fn(domEl, el[prop](count));
-      return;
-    }
-    fn(domEl, el[prop]);
-  }
-};
-
 var textSetter = function (text, domEl, count) {
     if (typeof text === 'function') {
       dom.appendChild(document.createTextNode(text(count)))(domEl);
@@ -79,27 +69,46 @@ var jsmlWalkerCallback = function (parentDomElement) {
       for (var property in jsmlElement) {
         if (jsmlElement.hasOwnProperty(property)) {
           switch (property) {
+            case "tag":
+              break;
+            case "count":
+              break;
+            case "children":
+              break;
+
             case "text":
               textSetter(jsmlElement.text, domElement, count);
               break;
+            case "callback":
+              jsmlElement.callback(domElement, parentDomElement, count);
+              break;
+            default:
+              if (domElement[property] !== undefined) {
+                if (typeof jsmlElement[property] === "function") {
+                  domElement[property] = jsmlElement[property](count);
+                } else {
+                  domElement[property] = jsmlElement[property];
+                }
+              }
           }
         }
       }
-      attrSetter(jsmlElement, 'id', domElement, dom.setId);
-      attrSetter(jsmlElement, 'class', domElement, dom.setClassName);
 
-
-      jsmlElement.callback && jsmlElement.callback(domElement, parentDomElement, count);
       dom.appendChild(domElement)(parentDomElement);
       return domElement;
   };
 };
 
 jsmlParse = function(jsml, parentNode) {
+  if (!parentNode) {
+    return function (parentNode) {
+      jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
+    };
+  }
   jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
 };
 
-},{"./domManipulation.js":"/home/b/js/wip/jsml/js/domManipulation.js","./spiceRack.js":"/home/b/js/wip/jsml/js/spiceRack.js"}],"/home/b/js/wip/jsml/js/spiceRack.js":[function(require,module,exports){
+},{"./domManipulation.js":"/home/b/js/jsml/js/domManipulation.js","./spiceRack.js":"/home/b/js/jsml/js/spiceRack.js"}],"/home/b/js/jsml/js/spiceRack.js":[function(require,module,exports){
 module.exports = function (fr) {
   return function (count) {
     return function (fn) {
@@ -112,4 +121,4 @@ module.exports = function (fr) {
   };
 };
 
-},{}]},{},["/home/b/js/wip/jsml/js/main.js"]);
+},{}]},{},["/home/b/js/jsml/js/main.js"]);

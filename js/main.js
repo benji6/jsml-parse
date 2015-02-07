@@ -1,5 +1,20 @@
-var iterateFrom = require('./spiceRack.js');
-var dom = require('./domManipulation.js');
+var iterateFrom = function (fr) {
+  return function (count) {
+    return function (fn) {
+      var from = fr;
+      var to = count + fr;
+      while (from < to) {
+        fn(from++);
+      }
+    };
+  };
+};
+
+var appendChild = function (child) {
+  return function (parent) {
+    return parent.appendChild(child);
+  };
+};
 
 var jsmlWalker = function jsmlWalker (fn) {
   return function recurse (jsml) {
@@ -27,22 +42,12 @@ var jsmlWalker = function jsmlWalker (fn) {
   };
 };
 
-var attrSetter = function(el, prop, domEl, fn, count) {
-  if(el[prop]) {
-    if (typeof el[prop] === 'function') {
-      fn(domEl, el[prop](count));
-      return;
-    }
-    fn(domEl, el[prop]);
-  }
-};
-
 var textSetter = function (text, domEl, count) {
     if (typeof text === 'function') {
-      dom.appendChild(document.createTextNode(text(count)))(domEl);
+      appendChild(document.createTextNode(text(count)))(domEl);
       return;
     }
-    dom.appendChild(document.createTextNode(text))(domEl);
+    appendChild(document.createTextNode(text))(domEl);
 };
 
 var jsmlWalkerCallback = function (parentDomElement) {
@@ -54,22 +59,41 @@ var jsmlWalkerCallback = function (parentDomElement) {
       for (var property in jsmlElement) {
         if (jsmlElement.hasOwnProperty(property)) {
           switch (property) {
+            case "tag":
+              break;
+            case "count":
+              break;
+            case "children":
+              break;
+
             case "text":
               textSetter(jsmlElement.text, domElement, count);
               break;
+            case "callback":
+              jsmlElement.callback(domElement, parentDomElement, count);
+              break;
+            default:
+              if (domElement[property] !== undefined) {
+                if (typeof jsmlElement[property] === "function") {
+                  domElement[property] = jsmlElement[property](count);
+                } else {
+                  domElement[property] = jsmlElement[property];
+                }
+              }
           }
         }
       }
-      attrSetter(jsmlElement, 'id', domElement, dom.setId);
-      attrSetter(jsmlElement, 'class', domElement, dom.setClassName);
 
-
-      jsmlElement.callback && jsmlElement.callback(domElement, parentDomElement, count);
-      dom.appendChild(domElement)(parentDomElement);
+      appendChild(domElement)(parentDomElement);
       return domElement;
   };
 };
 
 jsmlParse = function(jsml, parentNode) {
+  if (!parentNode) {
+    return function (parentNode) {
+      jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
+    };
+  }
   jsmlWalker(jsmlWalkerCallback)(jsml)(parentNode);
 };
