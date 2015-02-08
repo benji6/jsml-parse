@@ -66,8 +66,8 @@ var jsmlWalkerCallback = function (parentDomElement) {
             case "children":
               break;
 
-            case "var" :
-              this[jsmlElement.var] = domElement;
+            case "variable" :
+              this[jsmlElement.variable] = domElement;
               break;
             case "text":
               textSetter(jsmlElement.text, domElement, count);
