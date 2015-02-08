@@ -1,6 +1,17 @@
 var parsed = jsmlParse({
-  "tag": "input",
-  "type": "range"
+  "tag": "p",
+  "text": "testing var",
+  "var": "hello",
+  "callback": (element) => {
+    console.log(element === hello);
+  },
+  "children": {
+    "tag": "p",
+    "text": "testing var more",
+    "callback": (element) => {
+      console.log(element === hello);
+    }
+  }
 });
 
 parsed(document.body);
