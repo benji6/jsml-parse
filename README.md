@@ -11,7 +11,7 @@ The following are special jsml properties which differ from the above:
 - `"tag"` - corresponds to html tag.
 - `"text"` - text to be appended to the element, can be a function, in which case id is set to the return value and count is passed as the first variable.
 - `"children"` - either a single jsml object or an array of jsml objects to be appended to the current DOM element.
-- `"variable"` - variable name to be used within the jsml object so other elements of the jsml object can refer to it.
+- `"variable"` - (IN DEVELOPMENT DO NOT USE) variable name to be used within the jsml object so other elements of the jsml object can refer to it.
 - `"count"` - number of elements to be created.
 - `"callback"` - function to call on created DOM element(s). Takes three arguments as follows:
 ```javascript
