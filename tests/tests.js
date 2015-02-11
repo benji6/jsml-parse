@@ -1,26 +1,26 @@
-var parsed = jsmlParse({
-  "tag": "p",
-  "text": "testing var",
-  "var": "hello",
-  "callback": (element) => {
-    console.log(element === hello);
-  },
-  "children": {
-    "tag": "p",
-    "text": "testing var more",
-    "callback": (element) => {
-      console.log(element === hello);
-    }
-  }
-});
-
-parsed(document.body);
+// var parsed = jsmlParse({
+//   "tag": "p",
+//   "text": "testing var",
+//   "var": "hello",
+//   "callback": (element) => {
+//     console.log(element === hello);
+//   },
+//   "children": {
+//     "tag": "p",
+//     "text": "testing var more",
+//     "callback": (element) => {
+//       console.log(element === hello);
+//     }
+//   }
+// });
+//
+// parsed(document.body);
 
 var jsml = {
   "tag": "p",
   "text": (count) => "hello, my count is: " + count,
   "id": "id",
-  "class": "red",
+  "className": "red",
   "count": "8",
   "callback": function(element, parentNode, index) {
     //can do anything here, e.g. set events, dynamic ids and classes etc...

@@ -29,7 +29,7 @@ var jsml = {
   "tag": "p",
   "text": (count) => "hello, my count is: " + count,
   "id": "id",
-  "class": "red",
+  "className": "red",
   "count": "8",
   "callback": function(domElement, parentNode, index) {
     //can do anything here...
