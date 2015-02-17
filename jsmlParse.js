@@ -67,6 +67,9 @@ var jsmlWalkerCallback = function (parentDomElement) {
             case "children":
               break;
 
+            case "colspan" :
+              domElement.setAttribute("colspan", jsmlElement.colspan);
+              break;
             case "variable" :
               this[jsmlElement.variable] = domElement;
               break;
