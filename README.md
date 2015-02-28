@@ -45,6 +45,8 @@ var parentNode //element to attach new DOM tree to
 jsmlParse(jsml, parentNode);
 ```
 Alternatively you can partially apply jsmlParse as below:
+
+**(NB This is likely to change so that the first highest level DOM element created is returned)**
 ```javascript
 var appendDomStructureTo = jsmlParse(jsml);
 //do some stuff
