@@ -1,7 +1,7 @@
 # JSML
 ###### JavaScript Markup Langauge
 ## Description
-jsmlParse takes jsml objects or an array of jsml objects to create DOM structures.
+Create DOM structures quickly & consisely using objects or JSON.
 
 ## jsml Structure
 Jsml properties consist of all valid attributes for the DOM element being created. The values of these properties can either be primitives which are set as the values of those DOM element properties or as functions which are executed with the count variable passed in as the only argument and which set the property with their return value.
@@ -14,6 +14,7 @@ The following are special jsml properties which differ from the above:
 - `"variable"` - (IN DEVELOPMENT DO NOT USE) variable name to be used within the jsml object so other elements of the jsml object can refer to it.
 - `"count"` - number of elements to be created.
 - `"callback"` - function to call on created DOM element(s). Takes three arguments as follows:
+
 ```javascript
 var callback = function(element, parentNode, index) {
   element //DOM element
@@ -23,7 +24,7 @@ var callback = function(element, parentNode, index) {
 }
 ```
 
-here is an example of a jsml object:
+Here is an example of a jsml object:
 ```javascript
 var jsml = {
   "tag": "p",
