@@ -7,6 +7,14 @@
     "build": "uglifyjs js/main.js -o jsmlParse.js",
     "test": "jasmine"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benji6/jsml-parse"
+  },
+  "bugs": {
+    "url": "https://github.com/benji6/jsml-parse/issues"
+  },
+  "homepage": "https://github.com/benji6/jsml-parse",
   "author": "Ben Hall",
   "license": "GPL-3.0",
   "devDependencies": {
