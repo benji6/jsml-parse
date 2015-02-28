@@ -2,15 +2,17 @@
   "name": "jsml-parse",
   "version": "1.0.0",
   "description": "",
-  "main": "js/main.js",
+  "main": "jsmlParse.js",
   "scripts": {
-    "build": "watchify js/main.js -o jsmlParse.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "watchify js/main.js -o jsmlParse.js"
+    "build": "uglifyjs js/main.js -o jsmlParse.js",
+    "test": "jasmine"
   },
   "author": "Ben Hall",
   "license": "GPL-3.0",
   "devDependencies": {
     "uglify-js": "^2.4.16"
-  }
+  },
+  "jshintConfig": {
+    "esnext": "true"
+  },
 }
