@@ -108,5 +108,5 @@ var jsmlParse = (function () {
 }());
 
 if (typeof module === 'object') {
-  module.exports = tinytic;
+  module.exports = jsmlParse;
 }
