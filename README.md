@@ -1,9 +1,9 @@
-#JSML
-######JavaScript Markup Langauge
-##Description
+# JSML
+###### JavaScript Markup Langauge
+## Description
 jsmlParse takes jsml objects or an array of jsml objects to create DOM structures.
 
-##jsml Structure
+## jsml Structure
 Jsml properties consist of all valid attributes for the DOM element being created. The values of these properties can either be primitives which are set as the values of those DOM element properties or as functions which are executed with the count variable passed in as the only argument and which set the property with their return value.
 
 The following are special jsml properties which differ from the above:
@@ -36,7 +36,7 @@ var jsml = {
   }
 };
 ```
-##jsmlParse
+## jsmlParse
 jsmlParse takes two arguments as below:
 ```javascript
 var jsml //array of jsml compliant objects
@@ -49,7 +49,7 @@ var appendDomStructureTo = jsmlParse(jsml);
 //do some stuff
 appendDomStructureTo(parentNode);
 ```
-##Example
+## Example
 ###Rendering a sudoku grid using DOM elements
 ```javascript
 //define function to be used in callback for setting id tags

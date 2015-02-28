@@ -10,8 +10,7 @@
   },
   "author": "Ben Hall",
   "license": "GPL-3.0",
-  "dependencies": {
-    "uglify-js": "^2.4.16",
-    "watchify": "^2.3.0"
+  "devDependencies": {
+    "uglify-js": "^2.4.16"
   }
 }
