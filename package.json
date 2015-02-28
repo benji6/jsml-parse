@@ -14,5 +14,5 @@
   },
   "jshintConfig": {
     "esnext": "true"
-  },
+  }
 }
