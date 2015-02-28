@@ -1,8 +1,8 @@
 {
-  "name": "jsml",
+  "name": "jsml-parse",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "js/main.js",
   "scripts": {
     "build": "watchify js/main.js -o jsmlParse.js",
     "test": "echo \"Error: no test specified\" && exit 1",
