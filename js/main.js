@@ -44,7 +44,7 @@ var jsmlParse = (function () {
     };
   };
 
-  var textSetter = function (text, domEl, count) {
+  var appendTextNode = function (text, domEl, count) {
     if (typeof text === 'function') {
       appendChild(document.createTextNode(text(count)))(domEl);
       return;
@@ -72,7 +72,7 @@ var jsmlParse = (function () {
                 this[jsmlElement.variable] = domElement;
                 break;
               case "text":
-                textSetter(jsmlElement.text, domElement, count);
+                appendTextNode(jsmlElement.text, domElement, count);
                 break;
               case "callback":
                 jsmlElement.callback(domElement, parentDomElement, count);
