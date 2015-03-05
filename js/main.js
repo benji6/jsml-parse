@@ -68,9 +68,6 @@ var jsmlParse = (function () {
               case "children":
                 break;
 
-              case "colspan" :
-                domElement.setAttribute("colspan", jsmlElement.colspan);
-                break;
               case "variable" :
                 this[jsmlElement.variable] = domElement;
                 break;
