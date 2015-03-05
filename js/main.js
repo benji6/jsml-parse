@@ -32,7 +32,7 @@ var jsmlParse = (function () {
             jsml.children && recurse(jsml.children)(domEl);
           }
         };
-        if (jsml.constructor === Array) {
+        if (Array.isArray(jsml.constructor)) {
           var i;
           for (i = 0; i < jsml.length; i++) {
             run(jsml[i]);
