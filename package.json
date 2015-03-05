@@ -4,8 +4,7 @@
   "description": "",
   "main": "jsmlParse.js",
   "scripts": {
-    "build": "uglifyjs js/main.js -o jsmlParse.js",
-    "test": "jasmine"
+    "build": "uglifyjs js/main.js -o jsmlParse.js"
   },
   "repository": {
     "type": "git",
