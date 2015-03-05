@@ -62,9 +62,7 @@ var jsmlParse = (function () {
           if (jsmlElement.hasOwnProperty(property)) {
             switch (property) {
               case "tag":
-                break;
               case "count":
-                break;
               case "children":
                 break;
 
