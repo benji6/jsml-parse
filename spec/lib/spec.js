@@ -1,4 +1,4 @@
-var jsmlParse = require('../lib/main.js');
+var jsmlParse = require('../../lib/main.js');
 
 describe("jsmlParse", () => {
   var jsml = null;

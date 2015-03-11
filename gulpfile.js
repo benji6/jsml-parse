@@ -5,7 +5,7 @@ var source = require('vinyl-source-stream');
 var watchify = require('watchify');
 
 gulp.task('spec', function () {
-  var bundler = watchify(browserify('./spec/spec.js', watchify.args));
+  var bundler = watchify(browserify('./spec/lib/spec.js', watchify.args));
 
   bundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))

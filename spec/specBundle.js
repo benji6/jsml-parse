@@ -1,5 +1,5 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./spec/spec.js":[function(require,module,exports){
-var jsmlParse = require('../lib/main.js');
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./spec/lib/spec.js":[function(require,module,exports){
+var jsmlParse = require('../../lib/main.js');
 
 describe("jsmlParse", () => {
   var jsml = null;
@@ -18,7 +18,7 @@ describe("jsmlParse", () => {
   require('./createDomElementFromJsmlSpec.js')();
 });
 
-},{"../lib/main.js":"/home/b/js/jsml/lib/main.js","./createDomElementFromJsmlSpec.js":"/home/b/js/jsml/spec/createDomElementFromJsmlSpec.js"}],"/home/b/js/jsml/lib/appendChild.js":[function(require,module,exports){
+},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./createDomElementFromJsmlSpec.js":"/home/b/js/jsml/spec/lib/createDomElementFromJsmlSpec.js"}],"/home/b/js/jsml/lib/appendChild.js":[function(require,module,exports){
 module.exports = function (parent) {
   return function (child) {
     return parent.appendChild(child);
@@ -105,8 +105,8 @@ module.exports = function recurse (jsml, parentDomElement) {
 },{"./createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}],"/home/b/js/jsml/lib/main.js":[function(require,module,exports){
 module.exports = require('./jsmlWalker.js');
 
-},{"./jsmlWalker.js":"/home/b/js/jsml/lib/jsmlWalker.js"}],"/home/b/js/jsml/spec/createDomElementFromJsmlSpec.js":[function(require,module,exports){
-var createDomElementFromJsml = require('../lib/createDomElementFromJsml.js');
+},{"./jsmlWalker.js":"/home/b/js/jsml/lib/jsmlWalker.js"}],"/home/b/js/jsml/spec/lib/createDomElementFromJsmlSpec.js":[function(require,module,exports){
+var createDomElementFromJsml = require('../../lib/createDomElementFromJsml.js');
 
 module.exports = () => {
   describe("createDomElementFromJsml: private module", () => {
@@ -126,4 +126,4 @@ module.exports = () => {
   });
 };
 
-},{"../lib/createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}]},{},["./spec/spec.js"]);
+},{"../../lib/createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}]},{},["./spec/lib/spec.js"]);

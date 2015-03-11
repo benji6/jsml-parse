@@ -1,4 +1,4 @@
-var createDomElementFromJsml = require('../lib/createDomElementFromJsml.js');
+var createDomElementFromJsml = require('../../lib/createDomElementFromJsml.js');
 
 module.exports = () => {
   describe("createDomElementFromJsml: private module", () => {
