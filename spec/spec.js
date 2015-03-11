@@ -14,4 +14,5 @@ describe("jsmlParse", () => {
   it("returns a DOM element when called with a jsml object", () => {
     expect(jsmlParse(jsml).tagName).toEqual(document.createElement('p').tagName);
   });
+  require('./createDomElementFromJsmlSpec.js')();
 });
