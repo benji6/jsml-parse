@@ -2,9 +2,11 @@
   "name": "jsml-parse",
   "version": "1.0.2",
   "description": "",
-  "main": "jsmlParse.js",
+  "main": "dist/main.js",
   "scripts": {
-    "build": "uglifyjs js/main.js -o jsmlParse.js"
+    "build": "gulp build",
+    "dev": "gulp",
+    "test": "firefox spec/SpecRunner.html"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,13 @@
   "author": "Ben Hall",
   "license": "GPL-3.0",
   "devDependencies": {
-    "uglify-js": "^2.4.16"
+    "browserify": "^9.0.3",
+    "gulp": "^3.8.11",
+    "gulp-uglify": "^1.1.0",
+    "gulp-util": "^3.0.4",
+    "uglify-js": "^2.4.16",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^2.4.0"
   },
   "jshintConfig": {
     "esnext": "true"

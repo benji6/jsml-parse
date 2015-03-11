@@ -1,3 +1,5 @@
+var jsmlParse = require('../dist/main.js');
+
 describe("jsmlParse", () => {
   var jsml = null;
 
