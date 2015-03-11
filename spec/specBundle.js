@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./spec/spec.js":[function(require,module,exports){
-var jsmlParse = require('../dist/main.js');
+var jsmlParse = require('../lib/main.js');
 
 describe("jsmlParse", () => {
   var jsml = null;
@@ -17,6 +17,92 @@ describe("jsmlParse", () => {
   });
 });
 
-},{"../dist/main.js":"/home/b/js/jsml/dist/main.js"}],"/home/b/js/jsml/dist/main.js":[function(require,module,exports){
-var maybeAppendChild=function(e){return function(t){return e.appendChild(t)}},appendTextNode=function(e,t,n){return"function"==typeof e?void maybeAppendChild(t)(document.createTextNode(e(n))):void maybeAppendChild(t)(document.createTextNode(e))},jsmlWalker=function(e){return function t(n,r){var a,c=function(n){n.count||(n.count=1);for(var c=0;c<n.count;c++)a=e(n,c,r),r&&maybeAppendChild(r)(a),n.children&&t(n.children)(a)};if(Array.isArray(n.constructor))for(var o=0;o<n.length;o++)c(n[o]);else c(n)}},createDomElementFromJsml=function(e,t,n){t||(t=0);var r=document.createElement(e.tag);for(var a in e)if(e.hasOwnProperty(a))switch(a){case"tag":case"count":case"children":break;case"variable":this[e.variable]=r;break;case"text":appendTextNode(e.text,r,t);break;case"callback":e.callback(r,n,t);break;default:void 0!==r[a]&&(r[a]="function"==typeof e[a]?e[a](t):e[a])}return r};module.exports=jsmlWalker(createDomElementFromJsml);
-},{}]},{},["./spec/spec.js"]);
+},{"../lib/main.js":"/home/b/js/jsml/lib/main.js"}],"/home/b/js/jsml/lib/appendChild.js":[function(require,module,exports){
+module.exports = function (parent) {
+  return function (child) {
+    return parent.appendChild(child);
+  };
+};
+
+},{}],"/home/b/js/jsml/lib/appendTextNode.js":[function(require,module,exports){
+module.exports = function (text, domEl, count) {
+  if (typeof text === 'function') {
+    appendChild(domEl)(document.createTextNode(text(count)));
+    return;
+  }
+  appendChild(domEl)(document.createTextNode(text));
+};
+
+},{}],"/home/b/js/jsml/lib/main.js":[function(require,module,exports){
+var appendChild = require('./appendChild.js');
+var appendTextNode = require('./appendTextNode.js');
+
+var jsmlWalker = function jsmlWalker (fn) {
+  return function recurse (jsml, parentDomElement) {
+    var domEl;
+
+    var run = function (jsml) {
+      if (!jsml.count) {
+        jsml.count = 1;
+      }
+      for (var i = 0; i < jsml.count; i++) {
+        domEl = fn(jsml, i, parentDomElement);
+        if (parentDomElement) {
+          appendChild(parentDomElement)(domEl);
+        }
+        if (jsml.children) {
+          recurse(jsml.children)(domEl);
+        }
+      }
+    };
+
+    if (Array.isArray(jsml.constructor)) {
+      for (var i = 0; i < jsml.length; i++) {
+        run(jsml[i]);
+      }
+      return;
+    }
+    run(jsml);
+  };
+};
+
+var createDomElementFromJsml = function (jsmlElement, count, parentDomElement) {
+    if (!count) {
+      count = 0;
+    }
+    var domElement = document.createElement(jsmlElement.tag);
+    for (var property in jsmlElement) {
+      if (jsmlElement.hasOwnProperty(property)) {
+        switch (property) {
+          case "tag":
+          case "count":
+          case "children":
+            break;
+
+          case "variable":
+            this[jsmlElement.variable] = domElement;
+            break;
+          case "text":
+            appendTextNode(jsmlElement.text, domElement, count);
+            break;
+          case "callback":
+            jsmlElement.callback(domElement, parentDomElement, count);
+            break;
+          default:
+            if (domElement[property] !== undefined) {
+              if (typeof jsmlElement[property] === "function") {
+                domElement[property] = jsmlElement[property](count);
+              } else {
+                domElement[property] = jsmlElement[property];
+              }
+            }
+        }
+      }
+    }
+
+    return domElement;
+};
+
+module.exports = jsmlWalker(createDomElementFromJsml);
+
+},{"./appendChild.js":"/home/b/js/jsml/lib/appendChild.js","./appendTextNode.js":"/home/b/js/jsml/lib/appendTextNode.js"}]},{},["./spec/spec.js"]);
