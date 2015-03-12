@@ -1,22 +1,26 @@
 var jsmlParse = require('../../lib/main.js');
 var exampleTags = require('./tags.js');
 
-describe("jsmlParse", () => {
-  var jsmlObjects = null;
+var expectDomElementsToBeEquivalent = (a, b) => {
+  expect(a.tagName).toEqual(b.tagName);
+  expect(a.constructor).toBe(b.constructor);
+};
 
-  beforeEach(() => {
-    jsmlObjects = exampleTags.map((tag) => {
+var expectTextToBe = (domEl, text) => {
+  expect(domEl.childNodes[0].nodeName).toBe("#text");
+  expect(domEl.childNodes[0].nodeValue).toBe(text);
+};
+
+describe("jsmlParse", () => {
+  it("returns a DOM element with the specified tag name when called with a single jsml object", () => {
+    var jsmlObjects = exampleTags.map((tag) => {
       return {
         tag
       };
     });
-  });
-  it("is a function (sanity check)", () => {
-    expect(jsmlParse).toEqual(jasmine.any(Function));
-  });
-  it("returns a DOM element with the specified tag name when called with a single jsml object", () => {
+
     jsmlObjects.forEach((jsmlObject, index) => {
-      expect(jsmlParse(jsmlObject).tagName).toEqual(document.createElement(exampleTags[index]).tagName);
+      expectDomElementsToBeEquivalent(jsmlParse(jsmlObject), document.createElement(exampleTags[index]));
     });
   });
   it("appends a textNode where text property is specified in jsml object", () => {
@@ -25,14 +29,31 @@ describe("jsmlParse", () => {
       tag: "p",
       text
     };
-
     var domEl = jsmlParse(jsml);
 
-    expect(domEl.childNodes[0].nodeName).toBe("#text");
-    expect(domEl.childNodes[0].nodeValue).toBe(text);
+    expectTextToBe(domEl, text);
   });
-  console.log(jsmlParse({
-    tag: "p"
-  }));
-  require('./createDomElementFromJsmlSpec.js')();
+  it("returns an array of DOM elements if count is specified", () => {
+    var jsml = {
+      count: 8,
+      tag: "p"
+    };
+    var domEls = jsmlParse(jsml);
+
+    domEls.forEach((domEl) => {
+      expectDomElementsToBeEquivalent(domEl, document.createElement("p"));
+    });
+  });
+  it("passes count into attribute callbacks", () => {
+    var jsml = {
+      count: 8,
+      tag: "p",
+      text: (count) => count
+    };
+    var domEls = jsmlParse(jsml);
+
+    domEls.forEach((domEl, index) => {
+      expectTextToBe(domEl, String(index));
+    });
+  });
 });

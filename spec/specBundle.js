@@ -2,22 +2,26 @@
 var jsmlParse = require('../../lib/main.js');
 var exampleTags = require('./tags.js');
 
-describe("jsmlParse", () => {
-  var jsmlObjects = null;
+var expectDomElementsToBeEquivalent = (a, b) => {
+  expect(a.tagName).toEqual(b.tagName);
+  expect(a.constructor).toBe(b.constructor);
+};
 
-  beforeEach(() => {
-    jsmlObjects = exampleTags.map((tag) => {
+var expectTextToBe = (domEl, text) => {
+  expect(domEl.childNodes[0].nodeName).toBe("#text");
+  expect(domEl.childNodes[0].nodeValue).toBe(text);
+};
+
+describe("jsmlParse", () => {
+  it("returns a DOM element with the specified tag name when called with a single jsml object", () => {
+    var jsmlObjects = exampleTags.map((tag) => {
       return {
         tag
       };
     });
-  });
-  it("is a function (sanity check)", () => {
-    expect(jsmlParse).toEqual(jasmine.any(Function));
-  });
-  it("returns a DOM element with the specified tag name when called with a single jsml object", () => {
+
     jsmlObjects.forEach((jsmlObject, index) => {
-      expect(jsmlParse(jsmlObject).tagName).toEqual(document.createElement(exampleTags[index]).tagName);
+      expectDomElementsToBeEquivalent(jsmlParse(jsmlObject), document.createElement(exampleTags[index]));
     });
   });
   it("appends a textNode where text property is specified in jsml object", () => {
@@ -26,19 +30,36 @@ describe("jsmlParse", () => {
       tag: "p",
       text
     };
-
     var domEl = jsmlParse(jsml);
 
-    expect(domEl.childNodes[0].nodeName).toBe("#text");
-    expect(domEl.childNodes[0].nodeValue).toBe(text);
+    expectTextToBe(domEl, text);
   });
-  console.log(jsmlParse({
-    tag: "p"
-  }));
-  require('./createDomElementFromJsmlSpec.js')();
+  it("returns an array of DOM elements if count is specified", () => {
+    var jsml = {
+      count: 8,
+      tag: "p"
+    };
+    var domEls = jsmlParse(jsml);
+
+    domEls.forEach((domEl) => {
+      expectDomElementsToBeEquivalent(domEl, document.createElement("p"));
+    });
+  });
+  it("passes count into attribute callbacks", () => {
+    var jsml = {
+      count: 8,
+      tag: "p",
+      text: (count) => count
+    };
+    var domEls = jsmlParse(jsml);
+
+    domEls.forEach((domEl, index) => {
+      expectTextToBe(domEl, String(index));
+    });
+  });
 });
 
-},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./createDomElementFromJsmlSpec.js":"/home/b/js/jsml/spec/lib/createDomElementFromJsmlSpec.js","./tags.js":"/home/b/js/jsml/spec/lib/tags.js"}],"/home/b/js/jsml/lib/appendChild.js":[function(require,module,exports){
+},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./tags.js":"/home/b/js/jsml/spec/lib/tags.js"}],"/home/b/js/jsml/lib/appendChild.js":[function(require,module,exports){
 module.exports = function (parent) {
   return function (child) {
     return parent.appendChild(child);
@@ -104,18 +125,37 @@ var createDomElementFromJsml = require('./createDomElementFromJsml.js');
 
 module.exports = function recurse (jsml, parentDomElement) {
   var jsmlCallback = function (jsml) {
+    var ret;
     var count = jsml.count || 1;
 
-    while (count--) {
-      var domEl = createDomElementFromJsml(jsml, count, parentDomElement);
+    if (!count || count <= 1) {
+      ret = createDomElementFromJsml(jsml, count, parentDomElement);
+
       if (jsml.children) {
-        recurse(jsml.children)(domEl);
+        recurse(jsml.children)(ret);
       }
+
       if (parentDomElement) {
-        return appendChild(parentDomElement)(domEl);
+        return appendChild(parentDomElement)(ret);
       }
-      return domEl;
+    } else {
+      ret = [];
+      for (var i = 0; i < count; i++) {
+        var domEl = createDomElementFromJsml(jsml, i, parentDomElement);
+
+        if (jsml.children) {
+          recurse(jsml.children)(domEl);
+        }
+
+        if (parentDomElement) {
+          return appendChild(parentDomElement)(domEl);
+        }
+
+        ret.push(domEl);
+      }
     }
+
+    return ret;
   };
 
   if (Array.isArray(jsml.children)) {
@@ -127,28 +167,7 @@ module.exports = function recurse (jsml, parentDomElement) {
 },{"./appendChild.js":"/home/b/js/jsml/lib/appendChild.js","./createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}],"/home/b/js/jsml/lib/main.js":[function(require,module,exports){
 module.exports = require('./jsmlWalker.js');
 
-},{"./jsmlWalker.js":"/home/b/js/jsml/lib/jsmlWalker.js"}],"/home/b/js/jsml/spec/lib/createDomElementFromJsmlSpec.js":[function(require,module,exports){
-var createDomElementFromJsml = require('../../lib/createDomElementFromJsml.js');
-
-module.exports = () => {
-  describe("createDomElementFromJsml: private module", () => {
-    var jsml = null;
-
-    beforeEach(() => {
-      jsml = {
-        tag: "p",
-      };
-    });
-    it("is a function", () => {
-      expect(createDomElementFromJsml).toEqual(jasmine.any(Function));
-    });
-    it("returns a DOM element when called with a jsml object", () => {
-      expect(createDomElementFromJsml(jsml).tagName).toEqual(document.createElement('p').tagName);
-    });
-  });
-};
-
-},{"../../lib/createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}],"/home/b/js/jsml/spec/lib/tags.js":[function(require,module,exports){
+},{"./jsmlWalker.js":"/home/b/js/jsml/lib/jsmlWalker.js"}],"/home/b/js/jsml/spec/lib/tags.js":[function(require,module,exports){
 module.exports = ["p", "div", "table"];
 
 },{}]},{},["./spec/lib/spec.js"]);
