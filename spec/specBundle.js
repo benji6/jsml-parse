@@ -24,7 +24,7 @@ describe("jsmlParse", () => {
       expectDomElementsToBeEquivalent(jsmlParse(jsmlObject), document.createElement(exampleTags[index]));
     });
   });
-  it("appends a textNode where text property is specified in jsml object", () => {
+  it("text: appends a textNode where text property is specified in jsml object", () => {
     var text = "Hello World!";
     var jsml = {
       tag: "p",
@@ -34,7 +34,7 @@ describe("jsmlParse", () => {
 
     expectTextToBe(domEl, text);
   });
-  it("returns an array of DOM elements if count is specified", () => {
+  it("count: returns an array of DOM elements if count is specified", () => {
     var jsml = {
       count: 8,
       tag: "p"
@@ -45,7 +45,7 @@ describe("jsmlParse", () => {
       expectDomElementsToBeEquivalent(domEl, document.createElement("p"));
     });
   });
-  it("passes count into attribute callbacks", () => {
+  it("count: passes count into attribute callbacks", () => {
     var jsml = {
       count: 8,
       tag: "p",
@@ -56,6 +56,43 @@ describe("jsmlParse", () => {
     domEls.forEach((domEl, index) => {
       expectTextToBe(domEl, String(index));
     });
+  });
+  it("children: when children property is a single jsml object a corresponding DOM element is created and appended to the parent DOM element", () => {
+    var jsml = {
+      tag: "div",
+      children: {
+        tag: "p"
+      }
+    };
+    var domEl = jsmlParse(jsml);
+
+    expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
+    expectDomElementsToBeEquivalent(domEl.children[0], document.createElement("p"));
+  });
+  it("children: when children property is an array of jsml objects corresponding DOM elements are created and appended to the parent DOM element", () => {
+    var jsml = {
+      tag: "div",
+      children: exampleTags.map((tag) => {
+        return {
+          tag
+        };
+      }),
+    };
+    var domEl = jsmlParse(jsml);
+
+    expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
+    // for (var i = 0; i < domEl.children.length; i++) {
+    //   expectDomElementsToBeEquivalent(domEl.children[i], document.createElement(exampleTags[i]));
+    // }
+    // domEl.children.forEach((domEl) => {
+    //   expectDomElementsToBeEquivalent(domEl, document.createElement(exampleTags[index]));
+    // });
+  });
+  it("children & count: ", () => {
+
+  });
+  it("callback: ", () => {
+
   });
 });
 
@@ -126,13 +163,20 @@ var createDomElementFromJsml = require('./createDomElementFromJsml.js');
 module.exports = function recurse (jsml, parentDomElement) {
   var jsmlCallback = function (jsml) {
     var ret;
-    var count = jsml.count || 1;
+    var i;
+    var count = jsml.count;
 
     if (!count || count <= 1) {
       ret = createDomElementFromJsml(jsml, count, parentDomElement);
 
       if (jsml.children) {
-        recurse(jsml.children)(ret);
+        if (Array.isArray(jsml.children)) {
+          for (i = 0; i < jsml.children.length; i++) {
+            recurse(jsml.children[i], ret);
+          }
+        } else {
+          recurse(jsml.children, ret);
+        }
       }
 
       if (parentDomElement) {
@@ -140,11 +184,17 @@ module.exports = function recurse (jsml, parentDomElement) {
       }
     } else {
       ret = [];
-      for (var i = 0; i < count; i++) {
+      for (i = 0; i < count; i++) {
         var domEl = createDomElementFromJsml(jsml, i, parentDomElement);
 
         if (jsml.children) {
-          recurse(jsml.children)(domEl);
+          if (Array.isArray(jsml.children)) {
+            for (i = 0; i < jsml.children.length; i++) {
+              recurse(jsml.children[i], domEl);
+            }
+          } else {
+            recurse(jsml.children, domEl);
+          }
         }
 
         if (parentDomElement) {
@@ -158,9 +208,7 @@ module.exports = function recurse (jsml, parentDomElement) {
     return ret;
   };
 
-  if (Array.isArray(jsml.children)) {
-    return jsml.children.forEach(jsmlCallback);
-  }
+
   return jsmlCallback(jsml);
 };
 
