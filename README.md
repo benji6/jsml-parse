@@ -55,48 +55,23 @@ var appendDomStructureTo = jsmlParse(jsml);
 appendDomStructureTo(parentNode);
 ```
 ## Example
-###Rendering a sudoku grid using DOM elements
+### Sudoku Grid
 ```javascript
-//define function to be used in callback for setting id tags
-var getId = (function() {
-  var id = 0;
-  return function() {
-    return id++;
-  };
-}());
-
 //jsml object
 var jsmlSudokuView = {
   tag: "table",
   children: {
     tag: "tr",
-    count: "3",
+    count: "9",
     children: {
       tag: "td",
-      count: "3",
+      count: "9",
       children: {
-        tag: "table",
+        tag: "select",
         children: {
-          tag: "tr",
-          count: "3",
-          children: {
-            tag: "td",
-            count: "3",
-            children: {
-              tag: "select",
-              id: getId,
-              children: {
-                tag: "option",
-                count: "10",
-                text: function(count) {
-                  if (!count) {
-                    return '';
-                  }
-                  return count;
-                }
-              }
-            }
-          }
+          tag: "option",
+          count: "9",
+          text: (count) => count
         }
       }
     }
