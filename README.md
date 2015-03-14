@@ -54,11 +54,10 @@ var appendDomStructureTo = jsmlParse(jsml);
 //do some stuff
 appendDomStructureTo(parentNode);
 ```
-## Example
+## Examples
 ### Sudoku Grid
 ```javascript
-//jsml object
-var jsmlSudokuView = {
+var jsml = {
   tag: "table",
   children: {
     tag: "tr",
@@ -76,6 +75,6 @@ var jsmlSudokuView = {
       }
     }
   }
-}
+};
 
 ```

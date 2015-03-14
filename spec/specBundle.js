@@ -81,40 +81,75 @@ describe("jsmlParse", () => {
     var domEl = jsmlParse(jsml);
 
     expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
-    // for (var i = 0; i < domEl.children.length; i++) {
-    //   expectDomElementsToBeEquivalent(domEl.children[i], document.createElement(exampleTags[i]));
-    // }
-    // domEl.children.forEach((domEl) => {
-    //   expectDomElementsToBeEquivalent(domEl, document.createElement(exampleTags[index]));
-    // });
-  });
-  it("children & count: ", () => {
+    exampleTags.forEach(function (tag, index) {
+      expectDomElementsToBeEquivalent(domEl.children[index], document.createElement(tag));
+    });
+
 
   });
-  it("callback: ", () => {
 
+  it("children with count: check expected behaviour for children with count property", () => {
+    var count = 5;
+
+    var jsml = {
+      tag: "div",
+      children: exampleTags.map((tag) => {
+        return {
+          count,
+          tag
+        };
+      }),
+    };
+    var domEl = jsmlParse(jsml);
+    console.log(domEl);
+    expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
+    exampleTags.forEach(function (tag, index) {
+      for (var i = 0; i < count; i++) {
+        expectDomElementsToBeEquivalent(domEl.children[index * count + i], document.createElement(tag));
+      }
+    });
+  });
+  it("callback: executes a callback on the created DOM element taking the following arguments (domElement, parentNode, count)", () => {
+    var jsml = {
+      tag: "div",
+      children: exampleTags.map((tag) => {
+        return {
+          callback: function (domElement, parentNOde, count) {
+
+          },
+          count: 2,
+          tag
+        };
+      }),
+    };
   });
 });
 
-},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./tags.js":"/home/b/js/jsml/spec/lib/tags.js"}],"/home/b/js/jsml/lib/appendChild.js":[function(require,module,exports){
+},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./tags.js":"/home/b/js/jsml/spec/lib/tags.js"}],"/home/b/js/jsml/lib/appendChildren.js":[function(require,module,exports){
 module.exports = function (parent) {
-  return function (child) {
-    return parent.appendChild(child);
+  return function (children) {
+    if (Array.isArray(children)) {
+      for (var i = 0; i < children.length; i++) {
+        parent.appendChild(child);
+      }
+      return;
+    }
+    return parent.appendChild(children);
   };
 };
 
 },{}],"/home/b/js/jsml/lib/appendTextNode.js":[function(require,module,exports){
-var appendChild = require('./appendChild.js');
+var appendChildren = require('./appendChildren.js');
 
 module.exports = function (text, domEl, count) {
   if (typeof text === 'function') {
-    appendChild(domEl)(document.createTextNode(text(count)));
+    appendChildren(domEl)(document.createTextNode(text(count)));
     return;
   }
-  appendChild(domEl)(document.createTextNode(text));
+  appendChildren(domEl)(document.createTextNode(text));
 };
 
-},{"./appendChild.js":"/home/b/js/jsml/lib/appendChild.js"}],"/home/b/js/jsml/lib/createDomElementFromJsml.js":[function(require,module,exports){
+},{"./appendChildren.js":"/home/b/js/jsml/lib/appendChildren.js"}],"/home/b/js/jsml/lib/createDomElementFromJsml.js":[function(require,module,exports){
 var appendTextNode = require('./appendTextNode.js');
 
 module.exports = function (jsmlElement, count, parentDomElement) {
@@ -157,7 +192,7 @@ module.exports = function (jsmlElement, count, parentDomElement) {
 };
 
 },{"./appendTextNode.js":"/home/b/js/jsml/lib/appendTextNode.js"}],"/home/b/js/jsml/lib/jsmlWalker.js":[function(require,module,exports){
-var appendChild = require('./appendChild.js');
+var appendChildren = require('./appendChildren.js');
 var createDomElementFromJsml = require('./createDomElementFromJsml.js');
 
 module.exports = function recurse (jsml, parentDomElement) {
@@ -180,7 +215,7 @@ module.exports = function recurse (jsml, parentDomElement) {
       }
 
       if (parentDomElement) {
-        return appendChild(parentDomElement)(ret);
+        return appendChildren(parentDomElement)(ret);
       }
     } else {
       ret = [];
@@ -198,7 +233,7 @@ module.exports = function recurse (jsml, parentDomElement) {
         }
 
         if (parentDomElement) {
-          return appendChild(parentDomElement)(domEl);
+          return appendChildren(parentDomElement)(domEl);
         }
 
         ret.push(domEl);
@@ -212,7 +247,7 @@ module.exports = function recurse (jsml, parentDomElement) {
   return jsmlCallback(jsml);
 };
 
-},{"./appendChild.js":"/home/b/js/jsml/lib/appendChild.js","./createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}],"/home/b/js/jsml/lib/main.js":[function(require,module,exports){
+},{"./appendChildren.js":"/home/b/js/jsml/lib/appendChildren.js","./createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}],"/home/b/js/jsml/lib/main.js":[function(require,module,exports){
 module.exports = require('./jsmlWalker.js');
 
 },{"./jsmlWalker.js":"/home/b/js/jsml/lib/jsmlWalker.js"}],"/home/b/js/jsml/spec/lib/tags.js":[function(require,module,exports){

@@ -80,17 +80,46 @@ describe("jsmlParse", () => {
     var domEl = jsmlParse(jsml);
 
     expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
-    // for (var i = 0; i < domEl.children.length; i++) {
-    //   expectDomElementsToBeEquivalent(domEl.children[i], document.createElement(exampleTags[i]));
-    // }
-    // domEl.children.forEach((domEl) => {
-    //   expectDomElementsToBeEquivalent(domEl, document.createElement(exampleTags[index]));
-    // });
-  });
-  it("children & count: ", () => {
+    exampleTags.forEach(function (tag, index) {
+      expectDomElementsToBeEquivalent(domEl.children[index], document.createElement(tag));
+    });
+
 
   });
-  it("callback: ", () => {
 
+  it("children with count: check expected behaviour for children with count property", () => {
+    var count = 5;
+
+    var jsml = {
+      tag: "div",
+      children: exampleTags.map((tag) => {
+        return {
+          count,
+          tag
+        };
+      }),
+    };
+    var domEl = jsmlParse(jsml);
+    console.log(domEl);
+    expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
+    exampleTags.forEach(function (tag, index) {
+      for (var i = 0; i < count; i++) {
+        expectDomElementsToBeEquivalent(domEl.children[index * count + i], document.createElement(tag));
+      }
+    });
+  });
+  it("callback: executes a callback on the created DOM element taking the following arguments (domElement, parentNode, count)", () => {
+    var jsml = {
+      tag: "div",
+      children: exampleTags.map((tag) => {
+        return {
+          callback: function (domElement, parentNOde, count) {
+
+          },
+          count: 2,
+          tag
+        };
+      }),
+    };
   });
 });
