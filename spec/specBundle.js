@@ -14,39 +14,13 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
   require("./specs/count.js");
   require("./specs/children.js");
   require("./specs/callback.js");
-
-  describe("other valid element attributes", () => {
-    it("if JSML property is a valid attribute name that attribute is assigned to the created DOM element", () => {
-      var p;
-
-      var attributes = {
-        id: "id",
-        className: "testClass"
-      };
-
-      var jsml = {
-        tag: "div",
-      };
-
-      for (p in attributes) {
-        jsml[p] = attributes[p];
-      }
-
-      var domEl = jsmlParse(jsml);
-
-      for (p in attributes) {
-        expect(domEl[p]).toBe(attributes[p]);
-      }
-    });
-  });
-  describe("called with parent DOM Element", () => {
-    it("appends", () => {
-
-    });
-  });
+  require("./specs/validAttributes.js");
+});
+describe("jsmlParse called with parent DOM Element as second argument", () => {
+  require("./specs/parentDomEl.js");
 });
 
-},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./exampleTags.js":"/home/b/js/jsml/spec/lib/exampleTags.js","./expectDomElementsToBeEquivalent":"/home/b/js/jsml/spec/lib/expectDomElementsToBeEquivalent.js","./specs/callback.js":"/home/b/js/jsml/spec/lib/specs/callback.js","./specs/children.js":"/home/b/js/jsml/spec/lib/specs/children.js","./specs/count.js":"/home/b/js/jsml/spec/lib/specs/count.js","./specs/tag.js":"/home/b/js/jsml/spec/lib/specs/tag.js","./specs/text.js":"/home/b/js/jsml/spec/lib/specs/text.js"}],"/home/b/js/jsml/lib/appendTextNode.js":[function(require,module,exports){
+},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./exampleTags.js":"/home/b/js/jsml/spec/lib/exampleTags.js","./expectDomElementsToBeEquivalent":"/home/b/js/jsml/spec/lib/expectDomElementsToBeEquivalent.js","./specs/callback.js":"/home/b/js/jsml/spec/lib/specs/callback.js","./specs/children.js":"/home/b/js/jsml/spec/lib/specs/children.js","./specs/count.js":"/home/b/js/jsml/spec/lib/specs/count.js","./specs/parentDomEl.js":"/home/b/js/jsml/spec/lib/specs/parentDomEl.js","./specs/tag.js":"/home/b/js/jsml/spec/lib/specs/tag.js","./specs/text.js":"/home/b/js/jsml/spec/lib/specs/text.js","./specs/validAttributes.js":"/home/b/js/jsml/spec/lib/specs/validAttributes.js"}],"/home/b/js/jsml/lib/appendTextNode.js":[function(require,module,exports){
 module.exports = function (text, domEl, count) {
   if (typeof text === 'function') {
     domEl.appendChild(document.createTextNode(text(count)));
@@ -346,7 +320,26 @@ describe("count:", () => {
   });
 });
 
-},{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js","../expectDomElementsToBeEquivalent":"/home/b/js/jsml/spec/lib/expectDomElementsToBeEquivalent.js","../expectTextToBe.js":"/home/b/js/jsml/spec/lib/expectTextToBe.js"}],"/home/b/js/jsml/spec/lib/specs/tag.js":[function(require,module,exports){
+},{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js","../expectDomElementsToBeEquivalent":"/home/b/js/jsml/spec/lib/expectDomElementsToBeEquivalent.js","../expectTextToBe.js":"/home/b/js/jsml/spec/lib/expectTextToBe.js"}],"/home/b/js/jsml/spec/lib/specs/parentDomEl.js":[function(require,module,exports){
+var jsmlParse = require('../../../lib/main.js');
+var expectDomElementsToBeEquivalent = require("../expectDomElementsToBeEquivalent");
+
+it("appends created DOM structure to the specified DOM element", () => {
+  var id = Math.random();
+  var jsml = {
+    tag: "div",
+    id,
+    children: {
+      tag: "span"
+    }
+  };
+
+  jsmlParse(jsml, document.body);
+
+  expectDomElementsToBeEquivalent(document.getElementById(id), document.createElement("div"));
+});
+
+},{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js","../expectDomElementsToBeEquivalent":"/home/b/js/jsml/spec/lib/expectDomElementsToBeEquivalent.js"}],"/home/b/js/jsml/spec/lib/specs/tag.js":[function(require,module,exports){
 var jsmlParse = require('../../../lib/main.js');
 var exampleTags = require('../exampleTags.js');
 var expectDomElementsToBeEquivalent = require("../expectDomElementsToBeEquivalent");
@@ -382,4 +375,32 @@ describe("text:", () => {
   });
 });
 
-},{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js","../expectTextToBe.js":"/home/b/js/jsml/spec/lib/expectTextToBe.js"}]},{},["./spec/lib/spec.js"]);
+},{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js","../expectTextToBe.js":"/home/b/js/jsml/spec/lib/expectTextToBe.js"}],"/home/b/js/jsml/spec/lib/specs/validAttributes.js":[function(require,module,exports){
+var jsmlParse = require('../../../lib/main.js');
+
+describe("valid element attributes:", () => {
+  it("if JSML property is a valid attribute name that attribute is assigned to the created DOM element", () => {
+    var p;
+
+    var attributes = {
+      id: "id",
+      className: "testClass"
+    };
+
+    var jsml = {
+      tag: "div",
+    };
+
+    for (p in attributes) {
+      jsml[p] = attributes[p];
+    }
+
+    var domEl = jsmlParse(jsml);
+
+    for (p in attributes) {
+      expect(domEl[p]).toBe(attributes[p]);
+    }
+  });
+});
+
+},{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js"}]},{},["./spec/lib/spec.js"]);
