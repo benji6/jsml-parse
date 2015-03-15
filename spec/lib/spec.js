@@ -107,12 +107,9 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
         }
         return recurse(domEl.children[0], --index);
       };
-
       exampleTags.forEach(function (tag, index, arr) {
         expectDomElementsToBeEquivalent(recursivelyGetChild(domStructure, index), document.createElement(tag));
       });
-
-
     });
     it("when children property is an array of jsml objects corresponding DOM elements are created and appended to the parent DOM element", () => {
       var jsml = {
@@ -144,8 +141,6 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
         }),
       };
       var domEl = jsmlParse(jsml);
-      // console.log(jsml);
-      // console.log(domEl);
       expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
       exampleTags.forEach(function (tag, index) {
         for (var i = 0; i < count; i++) {
