@@ -7,12 +7,12 @@ Create DOM structures quickly & consisely using objects or JSON.
 ### Example
 ```javascript
 var jsml = {
-  "tag": "p",
-  "text": (count) => "hello, my count is: " + count,
-  "id": "id",
-  "className": "red",
-  "count": "8",
-  "callback": function(domElement, parentNode, index) {
+  tag: "p",
+  text: (count) => "hello, my count is: " + count,
+  id: "id",
+  className: "red",
+  count: "8",
+  callback: function(domElement, parentNode, index) {
     //can do anything here...
   }
 };
@@ -24,7 +24,6 @@ Jsml properties consist of all valid attributes for the DOM element being create
 - `"tag"` - corresponds to html tag.
 - `"text"` - text to be appended to the element, can be a function, in which case id is set to the return value and count is passed as the first variable.
 - `"children"` - either a single jsml object or an array of jsml objects to be appended to the current DOM element.
-- `"variable"` - (IN DEVELOPMENT DO NOT USE) variable name to be used within the jsml object so other elements of the jsml object can refer to it.
 - `"count"` - number of elements to be created.
 - `"callback"` - function to call on created DOM element(s). Takes three arguments as follows:
 
