@@ -148,6 +148,28 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
         }
       });
     });
+    it("expected behaviour when parent and children have count property", () => {
+      var count = 5;
+
+      var jsml = {
+        tag: "div",
+        count,
+        children: exampleTags.map((tag) => {
+          return {
+            count,
+            tag
+          };
+        }),
+      };
+      var domEl = jsmlParse(jsml);
+      exampleTags.forEach(function (tag, index) {
+        for (var j = 0; j < count; j++) {
+          for (var i = 0; i < count; i++) {
+            expectDomElementsToBeEquivalent(domEl[j].children[index * count + i], document.createElement(tag));
+          }
+        }
+      });
+    });
   });
   it("callback: executes a callback on the created DOM element taking the following arguments (domElement, parentNode, count)", () => {
     var jsml = {
