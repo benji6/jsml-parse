@@ -1,1 +1,8 @@
-module.exports = ["p", "div", "table"];
+module.exports = [
+  "div",
+  "span",
+  "table",
+  "tr",
+  "td",
+  "p"
+];

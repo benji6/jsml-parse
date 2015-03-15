@@ -63,17 +63,56 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
     });
   });
   describe("children:", () => {
-    it("when children property is a single jsml object a corresponding DOM element is created and appended to the parent DOM element", () => {
+    it("when children property is a single JSML object a corresponding DOM element is created and appended to the parent DOM element", () => {
       var jsml = {
         tag: "div",
         children: {
-          tag: "p"
+          tag: "span"
         }
       };
       var domEl = jsmlParse(jsml);
 
       expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
-      expectDomElementsToBeEquivalent(domEl.children[0], document.createElement("p"));
+      expectDomElementsToBeEquivalent(domEl.children[0], document.createElement("span"));
+    });
+    it("large hierarchical structures can be created by creating single JSML objects with single JSML children which in turn have single children and so on...", () => {
+      var recursivelySetChildren = function recurse (jsml, tag) {
+        if (!jsml.children) {
+          jsml.children = {
+            tag
+          };
+          return;
+        }
+        recurse(jsml.children, tag);
+      };
+
+      var jsml = exampleTags.reduce(function (acc, tag) {
+        if (typeof acc === "string") {
+          return {
+            tag: acc,
+            children: {
+              tag: tag
+            }
+          };
+        }
+        recursivelySetChildren(acc, tag);
+        return acc;
+      });
+
+      var domStructure = jsmlParse(jsml);
+
+      recursivelyGetChild = function recurse (domEl, index) {
+        if (!index) {
+          return domEl;
+        }
+        return recurse(domEl.children[0], --index);
+      };
+
+      exampleTags.forEach(function (tag, index, arr) {
+        expectDomElementsToBeEquivalent(recursivelyGetChild(domStructure, index), document.createElement(tag));
+      });
+
+
     });
     it("when children property is an array of jsml objects corresponding DOM elements are created and appended to the parent DOM element", () => {
       var jsml = {
@@ -105,7 +144,8 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
         }),
       };
       var domEl = jsmlParse(jsml);
-      console.log(domEl);
+      // console.log(jsml);
+      // console.log(domEl);
       expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
       exampleTags.forEach(function (tag, index) {
         for (var i = 0; i < count; i++) {

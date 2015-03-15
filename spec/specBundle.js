@@ -64,17 +64,56 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
     });
   });
   describe("children:", () => {
-    it("when children property is a single jsml object a corresponding DOM element is created and appended to the parent DOM element", () => {
+    it("when children property is a single JSML object a corresponding DOM element is created and appended to the parent DOM element", () => {
       var jsml = {
         tag: "div",
         children: {
-          tag: "p"
+          tag: "span"
         }
       };
       var domEl = jsmlParse(jsml);
 
       expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
-      expectDomElementsToBeEquivalent(domEl.children[0], document.createElement("p"));
+      expectDomElementsToBeEquivalent(domEl.children[0], document.createElement("span"));
+    });
+    it("large hierarchical structures can be created by creating single JSML objects with single JSML children which in turn have single children and so on...", () => {
+      var recursivelySetChildren = function recurse (jsml, tag) {
+        if (!jsml.children) {
+          jsml.children = {
+            tag
+          };
+          return;
+        }
+        recurse(jsml.children, tag);
+      };
+
+      var jsml = exampleTags.reduce(function (acc, tag) {
+        if (typeof acc === "string") {
+          return {
+            tag: acc,
+            children: {
+              tag: tag
+            }
+          };
+        }
+        recursivelySetChildren(acc, tag);
+        return acc;
+      });
+
+      var domStructure = jsmlParse(jsml);
+
+      recursivelyGetChild = function recurse (domEl, index) {
+        if (!index) {
+          return domEl;
+        }
+        return recurse(domEl.children[0], --index);
+      };
+
+      exampleTags.forEach(function (tag, index, arr) {
+        expectDomElementsToBeEquivalent(recursivelyGetChild(domStructure, index), document.createElement(tag));
+      });
+
+
     });
     it("when children property is an array of jsml objects corresponding DOM elements are created and appended to the parent DOM element", () => {
       var jsml = {
@@ -106,7 +145,8 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
         }),
       };
       var domEl = jsmlParse(jsml);
-      console.log(domEl);
+      // console.log(jsml);
+      // console.log(domEl);
       expectDomElementsToBeEquivalent(domEl, document.createElement("div"));
       exampleTags.forEach(function (tag, index) {
         for (var i = 0; i < count; i++) {
@@ -131,31 +171,16 @@ describe("jsmlParse called on JSML object with properties as follows:", () => {
   });
 });
 
-},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./tags.js":"/home/b/js/jsml/spec/lib/tags.js"}],"/home/b/js/jsml/lib/appendChildren.js":[function(require,module,exports){
-module.exports = function (parent) {
-  return function (children) {
-    if (Array.isArray(children)) {
-      for (var i = 0; i < children.length; i++) {
-        parent.appendChild(child);
-      }
-      return;
-    }
-    return parent.appendChild(children);
-  };
-};
-
-},{}],"/home/b/js/jsml/lib/appendTextNode.js":[function(require,module,exports){
-var appendChildren = require('./appendChildren.js');
-
+},{"../../lib/main.js":"/home/b/js/jsml/lib/main.js","./tags.js":"/home/b/js/jsml/spec/lib/tags.js"}],"/home/b/js/jsml/lib/appendTextNode.js":[function(require,module,exports){
 module.exports = function (text, domEl, count) {
   if (typeof text === 'function') {
-    appendChildren(domEl)(document.createTextNode(text(count)));
+    domEl.appendChild(document.createTextNode(text(count)));
     return;
   }
-  appendChildren(domEl)(document.createTextNode(text));
+  domEl.appendChild(document.createTextNode(text));
 };
 
-},{"./appendChildren.js":"/home/b/js/jsml/lib/appendChildren.js"}],"/home/b/js/jsml/lib/createDomElementFromJsml.js":[function(require,module,exports){
+},{}],"/home/b/js/jsml/lib/createDomElementFromJsml.js":[function(require,module,exports){
 var appendTextNode = require('./appendTextNode.js');
 
 module.exports = function (jsmlElement, count, parentDomElement) {
@@ -198,7 +223,6 @@ module.exports = function (jsmlElement, count, parentDomElement) {
 };
 
 },{"./appendTextNode.js":"/home/b/js/jsml/lib/appendTextNode.js"}],"/home/b/js/jsml/lib/jsmlWalker.js":[function(require,module,exports){
-var appendChildren = require('./appendChildren.js');
 var createDomElementFromJsml = require('./createDomElementFromJsml.js');
 
 module.exports = function recurse (jsml, parentDomElement) {
@@ -221,7 +245,7 @@ module.exports = function recurse (jsml, parentDomElement) {
       }
 
       if (parentDomElement) {
-        return appendChildren(parentDomElement)(ret);
+        return parentDomElement.appendChild(ret);
       }
     } else {
       ret = [];
@@ -239,7 +263,7 @@ module.exports = function recurse (jsml, parentDomElement) {
         }
 
         if (parentDomElement) {
-          return appendChildren(parentDomElement)(domEl);
+          return parentDomElement.appendChild(domEl);
         }
 
         ret.push(domEl);
@@ -253,10 +277,17 @@ module.exports = function recurse (jsml, parentDomElement) {
   return jsmlCallback(jsml);
 };
 
-},{"./appendChildren.js":"/home/b/js/jsml/lib/appendChildren.js","./createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}],"/home/b/js/jsml/lib/main.js":[function(require,module,exports){
+},{"./createDomElementFromJsml.js":"/home/b/js/jsml/lib/createDomElementFromJsml.js"}],"/home/b/js/jsml/lib/main.js":[function(require,module,exports){
 module.exports = require('./jsmlWalker.js');
 
 },{"./jsmlWalker.js":"/home/b/js/jsml/lib/jsmlWalker.js"}],"/home/b/js/jsml/spec/lib/tags.js":[function(require,module,exports){
-module.exports = ["p", "div", "table"];
+module.exports = [
+  "div",
+  "span",
+  "table",
+  "tr",
+  "td",
+  "p"
+];
 
 },{}]},{},["./spec/lib/spec.js"]);
