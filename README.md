@@ -54,6 +54,7 @@ var appendDomStructureTo = jsmlParse(jsml);
 appendDomStructureTo(parentNode);
 ```
 ## Examples
+Open index.html to see some examples
 ### Sudoku Grid
 ```javascript
 var jsml = {
@@ -68,8 +69,8 @@ var jsml = {
         tag: "select",
         children: {
           tag: "option",
-          count: "9",
-          text: (count) => count
+          count: "10",
+          text: (count) => count ? count : ""
         }
       }
     }

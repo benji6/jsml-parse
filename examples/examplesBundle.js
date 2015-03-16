@@ -1,8 +1,18 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./examples/main.js":[function(require,module,exports){
 var jsmlParse = require('../lib/main.js');
 
-var sudokuTitle = {
+var examplesTitle = {
   tag: "h1",
+  text: "JSML Examples"
+};
+
+var examplesDesc = {
+  tag: "p",
+  text: "Everything on this page has been rendered using JSML!"
+};
+
+var sudokuTitle = {
+  tag: "h2",
   text: "Sudoku Grid"
 };
 
@@ -18,8 +28,8 @@ var sudokuJsml = {
         tag: "select",
         children: {
           tag: "option",
-          count: "9",
-          text: (count) => count
+          count: "10",
+          text: (count) => count ? count : ""
         }
       }
     }
@@ -27,11 +37,13 @@ var sudokuJsml = {
 };
 
 var jsml = [
+  examplesTitle,
+  examplesDesc,
   sudokuTitle,
   sudokuJsml
 ];
 
-jsmlParse([sudokuTitle], document.body);
+jsmlParse(jsml, document.body);
 
 },{"../lib/main.js":"/home/b/js/jsml/lib/main.js"}],"/home/b/js/jsml/lib/appendTextNode.js":[function(require,module,exports){
 module.exports = function (text, domEl, count) {

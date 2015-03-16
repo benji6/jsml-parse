@@ -1,7 +1,17 @@
 var jsmlParse = require('../lib/main.js');
 
-var sudokuTitle = {
+var examplesTitle = {
   tag: "h1",
+  text: "JSML Examples"
+};
+
+var examplesDesc = {
+  tag: "p",
+  text: "Everything on this page has been rendered using JSML!"
+};
+
+var sudokuTitle = {
+  tag: "h2",
   text: "Sudoku Grid"
 };
 
@@ -17,8 +27,8 @@ var sudokuJsml = {
         tag: "select",
         children: {
           tag: "option",
-          count: "9",
-          text: (count) => count
+          count: "10",
+          text: (count) => count ? count : ""
         }
       }
     }
@@ -26,8 +36,10 @@ var sudokuJsml = {
 };
 
 var jsml = [
+  examplesTitle,
+  examplesDesc,
   sudokuTitle,
   sudokuJsml
 ];
 
-jsmlParse([sudokuTitle], document.body);
+jsmlParse(jsml, document.body);
