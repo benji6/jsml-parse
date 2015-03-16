@@ -78,44 +78,69 @@ module.exports = function recurse (jsml, parentDomElement) {
   var ret;
   var i;
   var j;
-  var count = jsml.count;
+  var k;
+  var domEl;
+  var count;
 
-  if (!count || count <= 1) {
-    ret = createDomElementFromJsml(jsml, count, parentDomElement);
+  if (Object.prototype.toString.call(jsml) === '[object Array]') {
+    ret = [];
+    for (i = 0; i < jsml.length; i++) {
+      count = jsml[i].count;
+      if (!count || count <= 1) {
+        domEl = createDomElementFromJsml(jsml[i], count, parentDomElement);
 
-    if (jsml.children) {
-      if (Array.isArray(jsml.children)) {
-        for (i = 0; i < jsml.children.length; i++) {
-          recurse(jsml.children[i], ret);
+        if (jsml[i].children) {
+          recurse(jsml[i].children, domEl);
         }
+
+        if (parentDomElement) {
+          parentDomElement.appendChild(domEl);
+        }
+
+        ret.push(domEl);
       } else {
-        recurse(jsml.children, ret);
+        for (j = 0; j < count; j++) {
+          domEl = createDomElementFromJsml(jsml[i], j, parentDomElement);
+
+          if (jsml[i].children) {
+            recurse(jsml[i].children, domEl);
+          }
+
+          if (parentDomElement) {
+            parentDomElement.appendChild(domEl);
+          }
+
+          ret.push(domEl);
+        }
       }
     }
-
-    if (parentDomElement) {
-      return parentDomElement.appendChild(ret);
-    }
   } else {
-    ret = [];
-    for (i = 0; i < count; i++) {
-      var domEl = createDomElementFromJsml(jsml, i, parentDomElement);
+    count = jsml.count;
+    if (!count || count <= 1) {
+      ret = domEl = createDomElementFromJsml(jsml, count, parentDomElement);
+
+      if (parentDomElement) {
+        parentDomElement.appendChild(ret);
+      }
 
       if (jsml.children) {
-        if (Array.isArray(jsml.children)) {
-          for (j = 0; j < jsml.children.length; j++) {
-            recurse(jsml.children[j], domEl);
-          }
-        } else {
+        recurse(jsml.children, domEl);
+      }
+    } else {
+      ret = [];
+      for (i = 0; i < count; i++) {
+        domEl = createDomElementFromJsml(jsml, i, parentDomElement);
+
+        if (parentDomElement) {
+          parentDomElement.appendChild(domEl);
+        }
+
+        ret.push(domEl);
+
+        if (jsml.children) {
           recurse(jsml.children, domEl);
         }
       }
-
-      if (parentDomElement) {
-        parentDomElement.appendChild(domEl);
-      }
-
-      ret.push(domEl);
     }
   }
 
@@ -324,7 +349,7 @@ describe("count:", () => {
 var jsmlParse = require('../../../lib/main.js');
 var expectDomElementsToBeEquivalent = require("../expectDomElementsToBeEquivalent");
 
-it("appends created DOM structure to the specified DOM element", () => {
+it("appends created DOM structure to the specified DOM element when jsml is a single object", () => {
   var id = Math.random();
   var jsml = {
     tag: "div",
@@ -337,6 +362,27 @@ it("appends created DOM structure to the specified DOM element", () => {
   jsmlParse(jsml, document.body);
 
   expectDomElementsToBeEquivalent(document.getElementById(id), document.createElement("div"));
+});
+
+it("appends created DOM structure to the specified DOM element when jsml is an array of jsml objects", () => {
+  var id0 = Math.random();
+  var id1 = Math.random();
+
+  var jsml = [
+    {
+      tag: "div",
+      id: id0
+    },
+    {
+      tag: "div",
+      id: id1
+    }
+  ];
+
+  jsmlParse(jsml, document.body);
+
+  expectDomElementsToBeEquivalent(document.getElementById(id0), document.createElement("div"));
+  expectDomElementsToBeEquivalent(document.getElementById(id1), document.createElement("div"));
 });
 
 },{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js","../expectDomElementsToBeEquivalent":"/home/b/js/jsml/spec/lib/expectDomElementsToBeEquivalent.js"}],"/home/b/js/jsml/spec/lib/specs/tag.js":[function(require,module,exports){
@@ -354,6 +400,19 @@ describe("tag:", () => {
 
     jsmlObjects.forEach((jsmlObject, index) => {
       expectDomElementsToBeEquivalent(jsmlParse(jsmlObject), document.createElement(exampleTags[index]));
+    });
+  });
+  it("returns an array of DOM elements with the specified tag names when called with an array of jsml objects", () => {
+    var jsmlObjects = exampleTags.map((tag) => {
+      return {
+        tag
+      };
+    });
+
+    var domEls = jsmlParse(jsmlObjects);
+
+    exampleTags.forEach((tag, index) => {
+      expectDomElementsToBeEquivalent(domEls[index], document.createElement(tag));
     });
   });
 });

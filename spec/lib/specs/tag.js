@@ -14,4 +14,17 @@ describe("tag:", () => {
       expectDomElementsToBeEquivalent(jsmlParse(jsmlObject), document.createElement(exampleTags[index]));
     });
   });
+  it("returns an array of DOM elements with the specified tag names when called with an array of jsml objects", () => {
+    var jsmlObjects = exampleTags.map((tag) => {
+      return {
+        tag
+      };
+    });
+
+    var domEls = jsmlParse(jsmlObjects);
+
+    exampleTags.forEach((tag, index) => {
+      expectDomElementsToBeEquivalent(domEls[index], document.createElement(tag));
+    });
+  });
 });
