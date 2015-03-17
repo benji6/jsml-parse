@@ -29,7 +29,9 @@ var sudokuJsml = {
         children: {
           tag: "option",
           count: "10",
-          text: (count) => count ? count : ""
+          text: function (count) {
+            return count ? count : "";
+          }
         }
       }
     }
@@ -65,17 +67,21 @@ var tableJsml = {
     children: {
       tag: "th",
       count: Object.keys(tableData[0]).length,
-      text: (count) => Object.keys(tableData[0])[count]
+      text: function (count) {
+        return Object.keys(tableData[0])[count];
+      }
     }
   },
   {
     tag: "tr",
     count: tableData.length,
-    children: (count) => {
+    children: function (count) {
       return {
         tag: "td",
         count: 5,
-        text: (index) => tableData[count][Object.keys(tableData[count])[index]]
+        text: function (index) {
+          return tableData[count][Object.keys(tableData[count])[index]];
+        }
       };
     }
   }]

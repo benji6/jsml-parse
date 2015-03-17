@@ -12,10 +12,23 @@ npm install jsml-parse
 var jsmlParse = require('jsml-parse');
 ```
 ### Or
-include jsml-parse.js (in root of repo) in a script tag to hang jsmlParse off the window
-
+Include jsml-parse.js (in root of repo) in a script tag to attach ```jsmlParse``` to the window.
 
 ## JSML Structure
+### Hello World
+```javascript
+//JSML object
+var helloWorld = {
+  tag: "p",
+  text: "Hello World!"
+};
+
+//Render directly to document.body
+jsmlParse(helloWorld, document.body);
+
+//alternatively assign element to variable:
+var domEl = jsmlParse(helloWorld);
+```
 ### Example
 ```javascript
 var jsml = {
@@ -30,7 +43,7 @@ var jsml = {
 };
 ```
 ### Overview
-Jsml properties consist of all valid attributes for the DOM element being created. The values of these properties can either be primitives which are set as the values of those DOM element properties or as functions which are executed with the count variable passed in as the only argument and which set the property with their return value.
+Jsml properties consist of all valid attributes for the DOM element being created. The values of these properties can either be primitives which are set as the values of those DOM element properties or as functions #### Examplewhich are executed with the count variable passed in as the only argument and which set the property with their return value.
 
 ### Special JSML Properties
 - `"tag"` - corresponds to html tag.
@@ -66,7 +79,7 @@ var appendDomStructureTo = jsmlParse(jsml);
 appendDomStructureTo(parentNode);
 ```
 ## Examples
-**Open index.html to see some examples!**
+**Open index.html or check out http://benji6.github.io/jsml-parse to see some examples!**
 
 
 ```javascript
