@@ -110,4 +110,20 @@ describe("children:", () => {
       }
     });
   });
+  it("when children is a function it is called with current count", () => {
+    var jsml = {
+      tag: "div",
+      count: 64,
+      children: (count) => {
+        return {
+          tag: "p",
+          id: count
+        };
+      }
+    };
+    var domEls = jsmlParse(jsml);
+    domEls.forEach((domEl, index) => {
+      expect(Number(domEl.children[0].id)).toBe(index);
+    });
+  });
 });

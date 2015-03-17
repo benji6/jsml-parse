@@ -90,7 +90,11 @@ module.exports = function recurse (jsml, parentDomElement) {
         domEl = createDomElementFromJsml(jsml[i], count, parentDomElement);
 
         if (jsml[i].children) {
-          recurse(jsml[i].children, domEl);
+          if (typeof jsml[i].children === "function") {
+            recurse(jsml[i].children(count), domEl);
+          } else {
+            recurse(jsml[i].children, domEl);
+          }
         }
 
         if (parentDomElement) {
@@ -103,7 +107,11 @@ module.exports = function recurse (jsml, parentDomElement) {
           domEl = createDomElementFromJsml(jsml[i], j, parentDomElement);
 
           if (jsml[i].children) {
-            recurse(jsml[i].children, domEl);
+            if (typeof jsml[i].children === "function") {
+              recurse(jsml[i].children(j), domEl);
+            } else {
+              recurse(jsml[i].children, domEl);
+            }
           }
 
           if (parentDomElement) {
@@ -124,7 +132,11 @@ module.exports = function recurse (jsml, parentDomElement) {
       }
 
       if (jsml.children) {
-        recurse(jsml.children, domEl);
+        if (typeof jsml.children === "function") {
+          recurse(jsml.children(count), domEl);
+        } else {
+          recurse(jsml.children, domEl);
+        }
       }
     } else {
       ret = [];
@@ -138,7 +150,11 @@ module.exports = function recurse (jsml, parentDomElement) {
         ret.push(domEl);
 
         if (jsml.children) {
-          recurse(jsml.children, domEl);
+          if (typeof jsml.children === "function") {
+            recurse(jsml.children(i), domEl);
+          } else {
+            recurse(jsml.children, domEl);
+          }
         }
       }
     }
@@ -310,6 +326,22 @@ describe("children:", () => {
           expectDomElementsToBeEquivalent(domEl[j].children[index * count + i], document.createElement(tag));
         }
       }
+    });
+  });
+  it("when children is a function it is called with current count", () => {
+    var jsml = {
+      tag: "div",
+      count: 64,
+      children: (count) => {
+        return {
+          tag: "p",
+          id: count
+        };
+      }
+    };
+    var domEls = jsmlParse(jsml);
+    domEls.forEach((domEl, index) => {
+      expect(Number(domEl.children[0].id)).toBe(index);
     });
   });
 });
