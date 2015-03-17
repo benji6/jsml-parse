@@ -375,6 +375,19 @@ describe("count:", () => {
       expectTextToBe(domEl, String(index));
     });
   });
+  it("0 is passed as the count argument if count is not specified", () => {
+    var jsml = {
+      tag: "p",
+      text: (count) => {
+        expect(count).toBe(0);
+        return count;
+      }
+    };
+    
+    var domEl = jsmlParse(jsml);
+
+    expectTextToBe(domEl, String(0));
+  });
 });
 
 },{"../../../lib/main.js":"/home/b/js/jsml/lib/main.js","../expectDomElementsToBeEquivalent":"/home/b/js/jsml/spec/lib/expectDomElementsToBeEquivalent.js","../expectTextToBe.js":"/home/b/js/jsml/spec/lib/expectTextToBe.js"}],"/home/b/js/jsml/spec/lib/specs/parentDomEl.js":[function(require,module,exports){
