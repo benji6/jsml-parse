@@ -1,7 +1,19 @@
 # JSML
 ###### JavaScript Markup Langauge
 ## Description
-Create DOM structures quickly & consisely using objects or JSON.
+Renders DOM structures client-side using JSON or objects. Structures are rendered rapidly and JSML notation allows for complicated and large structures to be described consisely.
+
+## Installation
+### Either
+```javascript
+npm install jsml-parse
+```
+```javascript
+var jsmlParse = require('jsml-parse');
+```
+### Or
+include jsml-parse.js (in root of repo) in a script tag to hang jsmlParse off the window
+
 
 ## JSML Structure
 ### Example
@@ -54,10 +66,11 @@ var appendDomStructureTo = jsmlParse(jsml);
 appendDomStructureTo(parentNode);
 ```
 ## Examples
-Open index.html to see some examples
-### Sudoku Grid
+**Open index.html to see some examples!**
+
+
 ```javascript
-var jsml = {
+var sudokuJsml = {
   tag: "table",
   children: {
     tag: "tr",
@@ -76,5 +89,7 @@ var jsml = {
     }
   }
 };
+
+var sudokuGrid = jsmlParse(sudokuJsml);
 
 ```
