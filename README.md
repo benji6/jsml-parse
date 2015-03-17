@@ -1,7 +1,7 @@
 # JSML
 ###### JavaScript Markup Langauge
 ## Description
-Renders DOM structures client-side using JSON or objects. Structures are rendered rapidly and JSML notation allows for complicated and large structures to be described consisely.
+Renders DOM structures client-side using JSON or objects. Structures are rendered rapidly and JSML notation allows for complicated and large structures to be described concisely.
 
 ## Installation
 ### Either
@@ -95,7 +95,7 @@ var tableJsml = {
 
 ```javascript
 var jsml //JSML object or array of JSML objects
-var parentNode //optional parent node to attach new DOM struture to
+var parentNode //optional parent node to attach new DOM structure to
 
 //return newly created element
 jsmlParse(jsml);
