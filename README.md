@@ -1,17 +1,118 @@
 # JSML
 ###### JavaScript Markup Langauge
 ## Description
-Create DOM structures quickly & consisely using objects or JSON.
+Renders DOM structures client-side using JSON or objects. Structures are rendered rapidly and JSML notation allows for complicated and large structures to be described consisely.
 
-## jsml Structure
-Jsml properties consist of all valid attributes for the DOM element being created. The values of these properties can either be primitives which are set as the values of those DOM element properties or as functions which are executed with the count variable passed in as the only argument and which set the property with their return value.
+## Installation
+### Either
+```javascript
+npm install jsml-parse
+```
+```javascript
+var jsmlParse = require('jsml-parse');
+```
+### Or
+Include jsml-parse.js (in root of repo) in a script tag to attach ```jsmlParse``` to the window.
 
-The following are special jsml properties which differ from the above:
+## Examples
+**Open index.html or check out http://benji6.github.io/jsml-parse to see some examples!**
 
+
+### Hello World
+```javascript
+//JSML object
+var helloWorld = {
+  tag: "p",
+  text: "Hello World!"
+};
+
+//Render directly to document.body
+jsmlParse(helloWorld, document.body);
+
+//alternatively assign element to variable:
+var domEl = jsmlParse(helloWorld);
+```
+### Sudoku Grid
+```javascript
+var sudokuJsml = {
+  tag: "table",
+  children: {
+    tag: "tr",
+    count: "9",
+    children: {
+      tag: "td",
+      count: "9",
+      children: {
+        tag: "select",
+        children: {
+          tag: "option",
+          count: "10",
+          text: (count) => count ? count : ""
+        }
+      }
+    }
+  }
+};
+
+var sudokuGrid = jsmlParse(sudokuJsml);
+
+```
+### Dynamically Rendered Table
+```javascript
+var tableData //array of objects
+
+var tableJsml = {
+  tag: "table",
+  children: [
+    {
+      tag: "thead",
+      children: {
+        tag: "th",
+        count: Object.keys(tableData[0]).length,
+        text: (count) => Object.keys(tableData[0])[count]
+      }
+    },
+    {
+      tag: "tr",
+      count: tableData.length,
+      children: (count) => {
+        return {
+          tag: "td",
+          count: 5,
+          text: (index) => tableData[count][Object.keys(tableData[count])[index]]
+        };
+      };
+    }
+  ]
+};
+```
+
+
+
+## How It Works
+### jsmlParse Arguments
+```jsmlParse``` either takes a single valid JSML object or an array of valid JSML objects as its first argument and returns a corresponding DOM structure. The second argument is optional and if provided ```jsmlParse``` will append the created DOM structure to it.
+
+```javascript
+var jsml //JSML object or array of JSML objects
+var parentNode //optional parent node to attach new DOM struture to
+
+//return newly created element
+jsmlParse(jsml);
+
+//or attach to parentNode
+jsmlParse(jsml, parentNode);
+```
+
+### JSML Structure and Properties
+The DOM element being created is specified by the ```tag``` property and is the same characters used in HTML or ```document.createElement()```.
+
+JSML properties consist of all valid attributes for the DOM element being created. The values of these properties can either be primitives which are set as the values of those DOM element properties or as functions which are executed with the count variable passed in as the only argument and which set the property with their return value.
+
+### Special JSML Properties
 - `"tag"` - corresponds to html tag.
-- `"text"` - text to be appended to the element, can be a function, in which case id is set to the return value and count is passed as the first variable.
+- `"text"` - text to be appended to the element.
 - `"children"` - either a single jsml object or an array of jsml objects to be appended to the current DOM element.
-- `"variable"` - (IN DEVELOPMENT DO NOT USE) variable name to be used within the jsml object so other elements of the jsml object can refer to it.
 - `"count"` - number of elements to be created.
 - `"callback"` - function to call on created DOM element(s). Takes three arguments as follows:
 
@@ -19,86 +120,8 @@ The following are special jsml properties which differ from the above:
 var callback = function(element, parentNode, index) {
   element //DOM element
   parentNode //parent DOM element
-  index //if count is specified in the jsml the index corresponds to the index
-        //of the element created so far, otherwise it will be 0
+  index //if count is specified in the jsml the index corresponds to the index of the element created so far, otherwise it will be 0
 }
 ```
-
-Here is an example of a jsml object:
-```javascript
-var jsml = {
-  "tag": "p",
-  "text": (count) => "hello, my count is: " + count,
-  "id": "id",
-  "className": "red",
-  "count": "8",
-  "callback": function(domElement, parentNode, index) {
-    //can do anything here...
-  }
-};
-```
-## jsmlParse
-jsmlParse takes two arguments as below:
-```javascript
-var jsml //array of jsml compliant objects
-var parentNode //element to attach new DOM tree to
-jsmlParse(jsml, parentNode);
-```
-Alternatively you can partially apply jsmlParse as below:
-
-**(NB This is likely to change so that the first highest level DOM element created is returned)**
-```javascript
-var appendDomStructureTo = jsmlParse(jsml);
-//do some stuff
-appendDomStructureTo(parentNode);
-```
-## Example
-###Rendering a sudoku grid using DOM elements
-```javascript
-//define function to be used in callback for setting id tags
-var getId = (function() {
-  var id = 0;
-  return function() {
-    return id++;
-  };
-}());
-
-//jsml object
-var jsmlSudokuView = {
-  tag: "table",
-  children: {
-    tag: "tr",
-    count: "3",
-    children: {
-      tag: "td",
-      count: "3",
-      children: {
-        tag: "table",
-        children: {
-          tag: "tr",
-          count: "3",
-          children: {
-            tag: "td",
-            count: "3",
-            children: {
-              tag: "select",
-              id: getId,
-              children: {
-                tag: "option",
-                count: "10",
-                text: function(count) {
-                  if (!count) {
-                    return '';
-                  }
-                  return count;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-```
+### Behind The Scenes
+```jsmlParse``` has been written largely in an imperative style for speed and compatibility with ECMAScript 3.
