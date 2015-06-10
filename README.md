@@ -1,21 +1,13 @@
+**N.B. This is an experiment I built when first learning JS, and before knowing about all the awesome view libraries that already existed.**
+
 # JSML
 ###### JavaScript Markup Langauge
+
 ## Description
 Renders DOM structures client-side using JSON or objects. Structures are rendered rapidly and JSML notation allows for complicated and large structures to be described concisely.
 
-## Installation
-### Either
-```javascript
-npm install jsml-parse
-```
-```javascript
-var jsmlParse = require('jsml-parse');
-```
-### Or
-Include jsml-parse.js (in root of repo) in a script tag to attach ```jsmlParse``` to the window.
-
 ## Examples
-**Open index.html or check out http://benji6.github.io/jsml-parse to see some examples!**
+**Open index.html or check out http://benji6.github.io/jsml-parse to see some examples**
 
 
 ### Hello World
